@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerInputHandler : MonoBehaviour
 {
 
+    GameObject player;
     PlayerInput input;
     InputReciever reciever;
     InputAction moveAction;
@@ -15,16 +16,34 @@ public class PlayerInputHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         input = GetComponent<PlayerInput>();
-        reciever = GameObject.FindGameObjectWithTag("Player").GetComponent<InputReciever>();
+        reciever = player.GetComponent<InputReciever>();
         moveAction = input.actions.FindAction("Move");
+        dashAction = input.actions.FindAction("Dash");
     }
 
     // Update is called once per frame
     void Update()
     {
-        InputData data = new InputData(moveAction.ReadValue<Vector2>(), Vector2.zero, false, false, false);
-        print(data);
+        if (player != null) SendPlayerCharacterInputs();
+    }
+
+    void SendPlayerCharacterInputs()
+    {
+        Vector2 mouseWorldDirection = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()).normalized;
+        Vector2 moveDirection = moveAction.ReadValue<Vector2>();
+        bool dashPress = dashAction.ReadValue<float>() != 0;
+        bool mouseHold = Mouse.current.leftButton.isPressed;
+        bool mouseClick = Mouse.current.leftButton.wasPressedThisFrame;
+
+        InputData data = new(
+            moveDirection,
+            mouseWorldDirection,
+            dashPress,
+            mouseHold,
+            mouseClick
+        );
         reciever.HandleInputs(data);
     }
 }

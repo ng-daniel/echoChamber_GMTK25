@@ -44,8 +44,9 @@ public class InputData
     public override string ToString()
     {
         return (
-            "Input Data [" +
-            "moveDirection: (" + moveDirection.x + ", " + moveDirection.y + ")" +
+            "Input Data [\n" +
+            "moveDirection: (" + moveDirection.x + ", " + moveDirection.y + ")\n" +
+            "dashPress: (" + dashPress + ")\n" +
             "]"
          );
     }

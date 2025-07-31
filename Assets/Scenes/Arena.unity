@@ -502,6 +502,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4455360393951349810, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
+      propertyPath: speed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4455360393951349810, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
+      propertyPath: dashSpeed
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4455360393951349810, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
+      propertyPath: dashTimeSeconds
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4455360393951349810, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
+      propertyPath: dashCooldownSeconds
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 5352425451979676578, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -512,11 +528,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7292810627095721256, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7292810627095721256, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 0.3125
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -103,7 +103,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 7
   dashSpeed: 10
+  gun: {fileID: 7976733028267971592}
+  bullet: {fileID: 0}
   fireIntervalSeconds: 0.5
+  gunDistanceFromBody: 0
 --- !u!50 &5598491805160936547
 Rigidbody2D:
   serializedVersion: 4

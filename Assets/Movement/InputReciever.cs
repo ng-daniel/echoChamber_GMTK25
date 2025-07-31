@@ -11,16 +11,27 @@ public class InputReciever : MonoBehaviour
 
     List<InputData> inputs = new List<InputData>();
 
-    [Header("MOVING")]
+    [Header("State Booleans")]
+    [SerializeField] bool isMoving;
+    [SerializeField] bool isDashing;
+    [SerializeField] bool isShooting;
+    [SerializeField] bool isHit;
+
+    [Header("Movement")]
     [SerializeField] float speed;
     [SerializeField] float dashSpeed;
-    bool isBusy;
-    [Header("SHOOTING")]
+    [SerializeField] float dashTimeSeconds;
+    [SerializeField] float dashCooldownSeconds;
+    float dashTimer = 0f;
+    [SerializeField] bool dashReady = true;
+
+    Vector2 dashDirection;
+    [Header("Shooting")]
     [SerializeField] GameObject gun;
     [SerializeField] GameObject bullet;
     [SerializeField] float fireIntervalSeconds;
     [SerializeField] float gunDistanceFromBody;
-    float fireTimer;
+    float fireTimer = 0f;
     bool fireReady = false;
 
     // Start is called before the first frame update
@@ -31,10 +42,24 @@ public class InputReciever : MonoBehaviour
 
     void Update()
     {
+        if (isDashing || !dashReady)
+        {
+            dashTimer += Time.deltaTime;
+
+            if (dashTimer > dashTimeSeconds) SetDashing(false);
+            if (isDashing) rb.velocity = dashDirection.normalized * dashSpeed;
+
+            if (dashTimer > dashTimeSeconds + dashCooldownSeconds)
+            {
+                dashTimer = 0;
+                SetDashReady(true);
+            }
+        }
+
         if (!fireReady)
         {
             fireTimer += Time.deltaTime;
-            if (fireTimer < fireIntervalSeconds)
+            if (fireTimer > fireIntervalSeconds)
             {
                 fireTimer = 0;
                 SetFireReady(true);
@@ -44,13 +69,13 @@ public class InputReciever : MonoBehaviour
 
     public void HandleInputs(InputData inputData)
     {
-        if (isBusy) return;
-
+        //print(inputData);
         if (inputData.IsDashPress() && inputData.GetMoveDirection() != Vector2.zero)
         {
             Dash(inputData.GetMoveDirection());
-            return;
         }
+
+        if (isDashing) return;
 
         if (inputData.IsMouseClick() && fireReady) FireBullet();
 
@@ -65,19 +90,44 @@ public class InputReciever : MonoBehaviour
     }
     void Move(Vector2 direction)
     {
+        if (direction != Vector2.zero)
+        {
+            SetMoving(false);
+        }
+        else
+        {
+            SetMoving(true);
+        }
         rb.velocity = direction.normalized * speed;
     }
 
     void Dash(Vector2 direction)
     {
-        rb.velocity = direction.normalized * dashSpeed;
+        if (!dashReady) return;
+
+        dashDirection = direction;
+        SetDashing(true);
+        SetDashReady(false);
     }
     void FireBullet()
     {
         SetFireReady(false);
     }
+
+    void SetMoving(bool val)
+    {
+        isMoving = val;
+    }
+    void SetDashing(bool val)
+    {
+        isDashing = val;
+    }
     void SetFireReady(bool val)
     {
         fireReady = val;
+    }
+    void SetDashReady(bool val)
+    {
+        dashReady = val;
     }
 }
