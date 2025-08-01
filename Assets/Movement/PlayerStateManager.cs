@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputReciever : MonoBehaviour
+public class PlayerStateManager : MonoBehaviour
 {
 
 
     Rigidbody2D rb;
+    SpriteRenderer playerSprite;
 
-    List<InputData> inputs = new List<InputData>();
 
     [Header("State Booleans")]
     [SerializeField] bool isMoving;
@@ -28,9 +28,11 @@ public class InputReciever : MonoBehaviour
     Vector2 dashDirection;
     [Header("Shooting")]
     [SerializeField] GameObject gun;
+    SpriteRenderer gunSprite;
     [SerializeField] GameObject bullet;
     [SerializeField] float fireIntervalSeconds;
     [SerializeField] float gunDistanceFromBody;
+    [SerializeField] LayerMask targetLayer;
     float fireTimer = 0f;
     bool fireReady = false;
 
@@ -38,6 +40,8 @@ public class InputReciever : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        gunSprite = gun.GetComponent<SpriteRenderer>();
+        playerSprite = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -77,7 +81,7 @@ public class InputReciever : MonoBehaviour
 
         if (isDashing) return;
 
-        if (inputData.IsMouseClick() && fireReady) FireBullet();
+        if (inputData.IsMouseHold() && fireReady) FireBullet(inputData.GetAimDirection());
 
         AimGun(inputData.GetAimDirection());
         Move(inputData.GetMoveDirection());
@@ -85,8 +89,20 @@ public class InputReciever : MonoBehaviour
 
     void AimGun(Vector2 direction)
     {
-        float angleDeg = Vector2.Angle(direction, Vector2.right);
+        // rotation
+        float angleDegRaw = Vector2.Angle(direction, Vector2.right);
+        float angleDeg = direction.y > 0 ? angleDegRaw : 180 + (180 - angleDegRaw);
         gun.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angleDeg));
+
+        // translation
+        Vector3 positionFromPlayer = direction.normalized * gunDistanceFromBody;
+        gun.transform.position = transform.position + positionFromPlayer;
+
+        // flip player and gun graphics accordingly
+        bool shouldFlip = direction.x < 0;
+        gunSprite.flipY = shouldFlip;
+        playerSprite.flipX = shouldFlip;
+
     }
     void Move(Vector2 direction)
     {
@@ -109,9 +125,11 @@ public class InputReciever : MonoBehaviour
         SetDashing(true);
         SetDashReady(false);
     }
-    void FireBullet()
+    void FireBullet(Vector2 direction)
     {
         SetFireReady(false);
+        BulletFunctionality b = Instantiate(bullet, gun.transform.position, gun.transform.rotation).GetComponent<BulletFunctionality>();
+        b.Initialize(direction.normalized, targetLayer);
     }
 
     void SetMoving(bool val)

@@ -8,7 +8,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     GameObject player;
     PlayerInput input;
-    InputReciever reciever;
+    PlayerStateManager playerStateManager;
     InputAction moveAction;
     InputAction dashAction;
 
@@ -18,7 +18,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         input = GetComponent<PlayerInput>();
-        reciever = player.GetComponent<InputReciever>();
+        playerStateManager = player.GetComponent<PlayerStateManager>();
         moveAction = input.actions.FindAction("Move");
         dashAction = input.actions.FindAction("Dash");
     }
@@ -31,7 +31,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     void SendPlayerCharacterInputs()
     {
-        Vector2 mouseWorldDirection = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()).normalized;
+        Vector2 mouseWorldDirection = (Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - player.transform.position).normalized;
         Vector2 moveDirection = moveAction.ReadValue<Vector2>();
         bool dashPress = dashAction.ReadValue<float>() != 0;
         bool mouseHold = Mouse.current.leftButton.isPressed;
@@ -40,10 +40,12 @@ public class PlayerInputHandler : MonoBehaviour
         InputData data = new(
             moveDirection,
             mouseWorldDirection,
+            player.transform.position,
             dashPress,
             mouseHold,
             mouseClick
         );
-        reciever.HandleInputs(data);
+        playerStateManager.HandleInputs(data);
+        GlobalInputData.GetInstance().RecordInput(data);
     }
 }

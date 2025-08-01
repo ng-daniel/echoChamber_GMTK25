@@ -101,12 +101,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dd099904def51941bfca5c063a205ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7
+  isMoving: 0
+  isDashing: 0
+  isShooting: 0
+  isHit: 0
+  speed: 5
   dashSpeed: 10
+  dashTimeSeconds: 0.2
+  dashCooldownSeconds: 0.3
+  dashReady: 1
   gun: {fileID: 7976733028267971592}
   bullet: {fileID: 0}
-  fireIntervalSeconds: 0.5
-  gunDistanceFromBody: 0
+  fireIntervalSeconds: 0.25
+  gunDistanceFromBody: 0.8
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!50 &5598491805160936547
 Rigidbody2D:
   serializedVersion: 4
