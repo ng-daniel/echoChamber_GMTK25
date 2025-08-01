@@ -17,16 +17,20 @@ public class GlobalInputData : MonoBehaviour
     }
 
     List<InputData> inputData = new List<InputData>();
-    int lowestIndex;
 
     public void RecordInput(InputData dataPoint)
     {
         inputData.Add(dataPoint);
     }
 
+    public InputData GetInput(int index)
+    {
+        return inputData[index];
+    }
+
     void FixedUpdate()
     {
-        print(inputData.Count);
+        //print(inputData.Count);
     }
 
     public void VerifyLowestIndex(int accessedLow)

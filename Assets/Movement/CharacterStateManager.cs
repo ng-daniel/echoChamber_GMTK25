@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateManager : MonoBehaviour
+public class CharacterStateManager : MonoBehaviour
 {
 
-
     Rigidbody2D rb;
-    SpriteRenderer playerSprite;
+    SpriteRenderer characterSprite;
 
 
     [Header("State Booleans")]
@@ -30,9 +29,11 @@ public class PlayerStateManager : MonoBehaviour
     [SerializeField] GameObject gun;
     SpriteRenderer gunSprite;
     [SerializeField] GameObject bullet;
+    DamageData bulletDamageData;
+    [SerializeField] float bulletSpeed;
+    [SerializeField] int bulletDamage;
     [SerializeField] float fireIntervalSeconds;
     [SerializeField] float gunDistanceFromBody;
-    [SerializeField] LayerMask targetLayer;
     float fireTimer = 0f;
     bool fireReady = false;
 
@@ -41,7 +42,8 @@ public class PlayerStateManager : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         gunSprite = gun.GetComponent<SpriteRenderer>();
-        playerSprite = GetComponent<SpriteRenderer>();
+        characterSprite = GetComponent<SpriteRenderer>();
+        bulletDamageData = new(this.gameObject, bulletDamage);
     }
 
     void Update()
@@ -82,6 +84,7 @@ public class PlayerStateManager : MonoBehaviour
         if (isDashing) return;
 
         if (inputData.IsMouseHold() && fireReady) FireBullet(inputData.GetAimDirection());
+        SetShooting(inputData.IsMouseHold() && !isDashing);
 
         AimGun(inputData.GetAimDirection());
         Move(inputData.GetMoveDirection());
@@ -98,22 +101,16 @@ public class PlayerStateManager : MonoBehaviour
         Vector3 positionFromPlayer = direction.normalized * gunDistanceFromBody;
         gun.transform.position = transform.position + positionFromPlayer;
 
-        // flip player and gun graphics accordingly
+        // flip character and gun graphics accordingly
         bool shouldFlip = direction.x < 0;
         gunSprite.flipY = shouldFlip;
-        playerSprite.flipX = shouldFlip;
+        characterSprite.flipX = shouldFlip;
 
     }
     void Move(Vector2 direction)
     {
-        if (direction != Vector2.zero)
-        {
-            SetMoving(false);
-        }
-        else
-        {
-            SetMoving(true);
-        }
+        bool movingValue = direction == Vector2.zero ? false : true;
+        SetMoving(movingValue);
         rb.velocity = direction.normalized * speed;
     }
 
@@ -129,7 +126,7 @@ public class PlayerStateManager : MonoBehaviour
     {
         SetFireReady(false);
         BulletFunctionality b = Instantiate(bullet, gun.transform.position, gun.transform.rotation).GetComponent<BulletFunctionality>();
-        b.Initialize(direction.normalized, targetLayer);
+        b.Initialize(direction.normalized, bulletSpeed, bulletDamageData);
     }
 
     void SetMoving(bool val)
@@ -139,6 +136,10 @@ public class PlayerStateManager : MonoBehaviour
     void SetDashing(bool val)
     {
         isDashing = val;
+    }
+    void SetShooting(bool val)
+    {
+        isShooting = val;
     }
     void SetFireReady(bool val)
     {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class BulletFunctionality : MonoBehaviour
@@ -7,20 +8,25 @@ public class BulletFunctionality : MonoBehaviour
 
     Rigidbody2D rb;
 
-    [SerializeField] float speed;
+    float speed;
     [SerializeField] float rotationSpeed;
+    int damage;
+    DamageData damageData;
+    [SerializeField] string damageDataContext;
     Vector2 direction;
-    LayerMask targetLayer;
+    float deathTimer = 15f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Initialize(Vector2 direction, LayerMask targetLayer)
+    public void Initialize(Vector2 direction, float speed, DamageData damage)
     {
         this.direction = direction;
-        this.targetLayer = targetLayer;
+        this.damageData = damage;
+        damageData.SetContext(damageDataContext);
+        this.speed = speed;
     }
 
     void Update()
@@ -30,21 +36,27 @@ public class BulletFunctionality : MonoBehaviour
         rb.rotation += rotationSpeed * Time.deltaTime;
         rb.rotation = rb.rotation >= 360 ? 0 : rb.rotation;
         rb.rotation = rb.rotation < 0 ? 360 : rb.rotation;
+
+        deathTimer -= Time.deltaTime;
+        if (deathTimer < 0)
+        {
+            //FizzleOut();
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // check if collision obj's layer is part of target layermask via bitwise operators
-        if (0 != (targetLayer & (1 << collision.gameObject.layer)))
-        {
-            print("hit target!");
-            DamageTarget(collision.gameObject);
-            FizzleOut();
-        }
+        print("hit something!");
+        bool hitResult = TryHitTarget(collision.gameObject);
+        if (hitResult) FizzleOut();
     }
-    void DamageTarget(GameObject target)
+    bool TryHitTarget(GameObject target)
     {
-
+        if (target == damageData.GetAttacker()) return false;
+        Health hp = target.GetComponent<Health>();
+        if (hp == null) return true;
+        hp.Damage(damageData);
+        return true;
     }
     void FizzleOut()
     {
