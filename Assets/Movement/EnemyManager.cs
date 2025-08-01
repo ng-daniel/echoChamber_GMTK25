@@ -20,6 +20,7 @@ public class EnemyManager : MonoBehaviour
     void FixedUpdate()
     {
         InputData nextMove = globalInput.GetInput(currentStep);
+        nextMove.SetAimDirection(nextMove.GetAimDirection() * -1);
         characterStateManager.HandleInputs(nextMove);
         currentStep++;
     }

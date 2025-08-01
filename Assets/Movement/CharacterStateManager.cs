@@ -125,8 +125,9 @@ public class CharacterStateManager : MonoBehaviour
     void FireBullet(Vector2 direction)
     {
         SetFireReady(false);
-        BulletFunctionality b = Instantiate(bullet, gun.transform.position, gun.transform.rotation).GetComponent<BulletFunctionality>();
-        b.Initialize(direction.normalized, bulletSpeed, bulletDamageData);
+
+        BulletFunctionality b = Instantiate(bullet, gun.transform.position, Quaternion.identity).GetComponent<BulletFunctionality>();
+        b.Initialize(direction.normalized, gun.transform.rotation.eulerAngles.z, bulletSpeed, bulletDamageData);
     }
 
     void SetMoving(bool val)

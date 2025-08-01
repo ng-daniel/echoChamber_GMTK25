@@ -14,19 +14,17 @@ public class BulletFunctionality : MonoBehaviour
     DamageData damageData;
     [SerializeField] string damageDataContext;
     Vector2 direction;
-    float deathTimer = 15f;
+    float deathTimer = 10f;
+    [SerializeField] GameObject particle;
 
-    void Start()
+    public void Initialize(Vector2 direction, float angle, float speed, DamageData damage)
     {
         rb = GetComponent<Rigidbody2D>();
-    }
-
-    public void Initialize(Vector2 direction, float speed, DamageData damage)
-    {
         this.direction = direction;
         this.damageData = damage;
         damageData.SetContext(damageDataContext);
         this.speed = speed;
+        this.rb.rotation = angle;
     }
 
     void Update()
@@ -40,7 +38,7 @@ public class BulletFunctionality : MonoBehaviour
         deathTimer -= Time.deltaTime;
         if (deathTimer < 0)
         {
-            //FizzleOut();
+            FizzleOut();
         }
     }
 
@@ -60,6 +58,7 @@ public class BulletFunctionality : MonoBehaviour
     }
     void FizzleOut()
     {
+        Instantiate(particle, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }
 }
