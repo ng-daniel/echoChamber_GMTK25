@@ -26,6 +26,7 @@ public class DamageData
 
     public bool AttackerInLayer(LayerMask targetLayer)
     {
+        if (attacker == null) return false;
         return 0 != (targetLayer & (1 << attacker.layer));
     }
     public bool AttackerHasTag(String tag)

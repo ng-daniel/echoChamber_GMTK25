@@ -30,7 +30,7 @@ public class GlobalInputData : MonoBehaviour
 
     void FixedUpdate()
     {
-        //print(inputData.Count);
+        print(inputData.Count);
     }
 
     public void VerifyLowestIndex(int accessedLow)

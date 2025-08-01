@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyInputManager : MonoBehaviour
+public class EnemyManager : MonoBehaviour
 {
 
     GlobalInputData globalInput;
@@ -17,11 +17,11 @@ public class EnemyInputManager : MonoBehaviour
         characterStateManager = GetComponent<CharacterStateManager>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        // InputData nextMove = globalInput.GetInput(currentStep);
-        // characterStateManager.HandleInputs(nextMove);
-        // currentStep++;
+        InputData nextMove = globalInput.GetInput(currentStep);
+        characterStateManager.HandleInputs(nextMove);
+        currentStep++;
     }
 
     void StartLoop()
