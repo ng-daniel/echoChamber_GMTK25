@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
 
     GlobalInputData globalInput;
     CharacterStateManager characterStateManager;
     int currentStep = 0;
     bool startLoop = false;
+    GameObject target;
 
     // Start is called before the first frame update
     void Start()
@@ -34,5 +35,4 @@ public class EnemyManager : MonoBehaviour
     {
 
     }
-
 }

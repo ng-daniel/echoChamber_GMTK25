@@ -204,15 +204,15 @@ MonoBehaviour:
   isShooting: 0
   isHit: 0
   speed: 5
-  dashSpeed: 10
+  dashSpeed: 15
   dashTimeSeconds: 0.2
   dashCooldownSeconds: 0.3
   dashReady: 1
   gun: {fileID: 2021288622733978460}
   bullet: {fileID: 7452570255316139198, guid: d804e037d23291348bac4ffbe264cb76, type: 3}
-  bulletSpeed: 10
+  bulletSpeed: 7
   bulletDamage: 1
-  fireIntervalSeconds: 0.5
+  fireIntervalSeconds: 0.25
   gunDistanceFromBody: 0.5
 --- !u!50 &4142565357714951767
 Rigidbody2D:

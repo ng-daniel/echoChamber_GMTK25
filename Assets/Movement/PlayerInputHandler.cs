@@ -11,6 +11,8 @@ public class PlayerInputHandler : MonoBehaviour
     CharacterStateManager playerStateManager;
     InputAction moveAction;
     InputAction dashAction;
+    InputData currentInput;
+    Vector2 mouseWorldLocation;
 
 
     // Start is called before the first frame update
@@ -26,26 +28,48 @@ public class PlayerInputHandler : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (player != null) SendPlayerCharacterInputs();
+        if (player != null)
+        {
+            currentInput = GenerateCurrentPlayerInput();
+            SendPlayerCharacterInputs(currentInput);
+        }
     }
 
-    void SendPlayerCharacterInputs()
+    InputData GenerateCurrentPlayerInput()
     {
-        Vector2 mouseWorldDirection = (Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - player.transform.position).normalized;
-        Vector2 moveDirection = moveAction.ReadValue<Vector2>();
-        bool dashPress = dashAction.ReadValue<float>() != 0;
+        Vector2 mouseWorldDirection = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - player.transform.position;
+        SetMousePosition((Vector3)mouseWorldDirection + player.transform.position);
         bool mouseHold = Mouse.current.leftButton.isPressed;
         bool mouseClick = Mouse.current.leftButton.wasPressedThisFrame;
 
+        Vector2 moveDirection = moveAction.ReadValue<Vector2>();
+        bool dashPress = dashAction.ReadValue<float>() != 0;
+
         InputData data = new(
             moveDirection,
-            mouseWorldDirection,
+            mouseWorldDirection.normalized,
             player.transform.position,
             dashPress,
             mouseHold,
             mouseClick
         );
+        return data;
+    }
+    void SendPlayerCharacterInputs(InputData data)
+    {
         playerStateManager.HandleInputs(data);
         GlobalInputData.GetInstance().RecordInput(data);
+    }
+    public InputData GetCurrentInputData()
+    {
+        return currentInput;
+    }
+    public Vector2 GetCurrentMouseWorldPosition()
+    {
+        return mouseWorldLocation;
+    }
+    public void SetMousePosition(Vector2 val)
+    {
+        mouseWorldLocation = val;
     }
 }
