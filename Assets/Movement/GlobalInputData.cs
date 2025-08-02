@@ -23,6 +23,7 @@ public class GlobalInputData : MonoBehaviour
     [SerializeField] int maxTimeSeconds; // maximum history in seconds to store
     [SerializeField] float cleanseInterval;
     float cleanseTimer;
+    [SerializeField] int safeDataAccessBufferTimeSeconds;
 
     public void RecordInput(InputData dataPoint)
     {
@@ -31,37 +32,55 @@ public class GlobalInputData : MonoBehaviour
 
     public InputData GetInput(int index)
     {
-        if (index < inputData.Keys.Min() || index > inputData.Keys.Max()) return null;
-        return inputData[index];
+        InputData data;
+        if (inputData.TryGetValue(index, out data)) return null;
+        return data;
     }
     public InputData GetEarliestInput()
     {
         return GetInput(inputData.Keys.Min());
     }
+    public InputData GetEarliestSafeInput()
+    {
+        return GetInput(GetEarliestSafeIndex());
+    }
+    public int GetEarliestSafeIndex()
+    {
+        return inputData.Keys.Min() + GetExtraDataCount() + (safeDataAccessBufferTimeSeconds * DATA_PER_SECOND);
+    }
     public InputData GetInputBySecondsBehind(int seconds)
     {
-        int index = inputData.Keys.Max() - seconds * DATA_PER_SECOND;
-        return GetInput(index);
+        return GetInput(inputData.Keys.Max() - (seconds * DATA_PER_SECOND));
     }
 
     void FixedUpdate()
     {
-        //print(inputData.Count);
+        // print("DATA: " + inputData.Keys.Min() + " | " + GetEarliestSafeIndex() + " | " + inputData.Keys.Max() + " | " + (GetEarliestSafeInput() == null));
+        cleanseTimer += Time.deltaTime;
+        if (cleanseTimer > cleanseInterval)
+        {
+            CleanseDataList();
+            cleanseTimer = 0;
+        }
     }
 
     void CleanseDataList()
     {
-        // everytime cleanse data is called, remove some of the data over the limit
+        // everytime cleanse data is called, remove data over the limit
 
-        float proportion = 0.9f;
-        int extraData = inputData.Count - (maxTimeSeconds * DATA_PER_SECOND);
+        int extraData = GetExtraDataCount();
         if (extraData > 0)
         {
             int min = inputData.Keys.Min();
-            for (int i = min; i < (min + Mathf.RoundToInt(extraData * proportion)); i++)
+            for (int i = min; i < (min + extraData); i++)
             {
                 inputData.Remove(i);
             }
         }
+    }
+    int GetExtraDataCount()
+    {
+        int extraData = inputData.Count - (maxTimeSeconds * DATA_PER_SECOND);
+        return extraData > 0 ? extraData : 0;
     }
 }

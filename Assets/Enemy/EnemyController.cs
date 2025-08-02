@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-
-    GlobalInputData globalInput;
     CharacterStateManager characterStateManager;
 
     [Header("Read Input Parameters")]
@@ -15,19 +13,18 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        globalInput = GlobalInputData.GetInstance();
         characterStateManager = GetComponent<CharacterStateManager>();
     }
 
     void FixedUpdate()
     {
-        InputData nextMove = globalInput.GetInput(index);
+        InputData nextMove = GlobalInputData.GetInstance().GetInput(index);
         characterStateManager.HandleInputs(nextMove);
         index++;
     }
     public void Initialize()
     {
-        InputData nextMove = globalInput.GetEarliestInput();
+        InputData nextMove = GlobalInputData.GetInstance().GetEarliestSafeInput();
         transform.position = nextMove.GetPosition();
         this.index = nextMove.GetIndex();
     }

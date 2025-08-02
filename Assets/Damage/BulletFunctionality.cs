@@ -14,7 +14,7 @@ public class BulletFunctionality : MonoBehaviour
     DamageData damageData;
     [SerializeField] string damageDataContext;
     Vector2 direction;
-    float deathTimer = 10f;
+    float deathTimer = 5f;
     [SerializeField] GameObject particle;
 
     public void Initialize(Vector2 direction, float angle, float speed, DamageData damage)

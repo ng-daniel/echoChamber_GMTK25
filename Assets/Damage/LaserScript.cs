@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossLaserScript : MonoBehaviour
+public class LaserScript : MonoBehaviour
 {
 
     LineRenderer lineRenderer;

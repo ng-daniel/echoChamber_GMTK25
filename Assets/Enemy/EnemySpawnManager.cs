@@ -5,58 +5,49 @@ using UnityEngine;
 public class EnemySpawnManager : MonoBehaviour
 {
 
-    GlobalInputData globalInputData;
     [SerializeField] GameObject enemyPrefab;
     static List<GameObject> enemyList = new List<GameObject>();
 
-    [Header("Spawn Machine Parameters")]
-    [SerializeField] bool loopingSpawnEnabled = false;
+    [Header("Static Spawn Chain Params")]
+    bool staticSpawnRunning = false;
+    [SerializeField] int startSecondsBehind;
+    [SerializeField] float staticSpawnIntervalSec;
+    [SerializeField] int staticSpawnAmount;
 
-    [Header("Spawn Time Parameters")]
-    [SerializeField] float firstSpawnTimeSeconds;
-    [SerializeField] float spawnIntervalSeconds;
-    [SerializeField] float spawnIntervalVarianceSeconds;
-    [Header("Spawn Frame Parameters")]
-    [SerializeField] int firstSpawnFrame;
-    [SerializeField] int spawnFrameBackLogRange; // how many frames are required in GlobalInputData before
-    int currentFrame;
-
-    void Start()
-    {
-        StartFirstSpawn();
-    }
 
     void Update()
     {
-        // if (loopingSpawnEnabled)
-        // {
-        //     spawnTimer += Time.deltaTime;
-        //     if (spawnTimer > spawnIntervalSeconds)
-        //     {
-        //         TrySpawnEnemyAtInputFrame(currentFrame);
-        //         IncrementCurrentFrame();
-        //         UpdateVariance();
-        //         spawnTimer = 0;
-        //     }
-        // }
+        StaticSpawnChain();
     }
 
-    public void SpawnChain()
+    public void StaticSpawnChain()
     {
-        //InputData data = 
+        if (staticSpawnRunning) return;
+        StartCoroutine(StaticSpawnChainCoroutine());
+    }
+    IEnumerator StaticSpawnChainCoroutine()
+    {
+        staticSpawnRunning = true;
+        InputData data = GlobalInputData.GetInstance().GetInputBySecondsBehind(startSecondsBehind);
+        if (data != null)
+        {
+            for (int i = 0; i < staticSpawnAmount; i++)
+            {
+                print("DATA: " + data.GetIndex());
+                SpawnEnemyWithInputFrame(data);
+                yield return new WaitForSeconds(staticSpawnIntervalSec);
+            }
+        }
+        staticSpawnRunning = false;
     }
 
-    bool TrySpawnEnemyAtInputFrame(int frame)
+    void SpawnEnemyWithInputFrame(InputData inputData)
     {
-        InputData inputData = GlobalInputData.GetInstance().GetInput(frame);
-        if (inputData == null) return false;
-        SpawnEnemyWithInputFrame(inputData);
-        return true;
-    }
+        if (inputData == null) print("ERROR: inputData is null for trying to spawn an enemy.");
 
-    void SpawnEnemyWithInputFrame(InputData input)
-    {
-        GameObject newEnemy = Instantiate(enemyPrefab, input.GetPosition(), Quaternion.identity);
+        GameObject newEnemy = Instantiate(enemyPrefab, inputData.GetPosition(), Quaternion.identity);
+        EnemyController enemyController = newEnemy.GetComponent<EnemyController>();
+        enemyController.Initialize();
         enemyList.Add(newEnemy);
     }
 
@@ -64,20 +55,5 @@ public class EnemySpawnManager : MonoBehaviour
     {
         // actions
         enemyList.Remove(deadEnemy);
-    }
-
-    void StartFirstSpawn()
-    {
-        StartCoroutine(FirstSpawnCoroutine(firstSpawnTimeSeconds));
-    }
-    IEnumerator FirstSpawnCoroutine(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-        TrySpawnEnemyAtInputFrame(firstSpawnFrame);
-        ToggleLoopingSpawn(true);
-    }
-    void ToggleLoopingSpawn(bool val)
-    {
-        loopingSpawnEnabled = val;
     }
 }
