@@ -19,7 +19,7 @@ public class GlobalInputData : MonoBehaviour
     }
 
     [SerializeField] Dictionary<int, InputData> inputData = new Dictionary<int, InputData>();
-    const int DATA_PER_SECOND = 50; // due to fixed update always running 50 times per second
+    public const int DATA_PER_SECOND = 50; // due to fixed update always running 50 times per second
     [SerializeField] int maxTimeSeconds; // maximum history in seconds to store
     [SerializeField] float cleanseInterval;
     float cleanseTimer;

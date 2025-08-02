@@ -10,36 +10,80 @@ public class EnemySpawnManager : MonoBehaviour
 
     [Header("Static Spawn Chain Params")]
     bool staticSpawnRunning = false;
-    [SerializeField] int startSecondsBehind;
+    [SerializeField] int staticStartSecondsBehind;
     [SerializeField] float staticSpawnIntervalSec;
     [SerializeField] int staticSpawnAmount;
+
+    [Header("Dynamic Spawn Chain Params")]
+    bool dynamicSpawnRunning = false;
+    [SerializeField] int dynamicStartSecondsBehind;
+    [SerializeField] float dynamicSpawnIntervalSec;
+    [SerializeField] float dynamicSpawnDistanceSec;
+    [SerializeField] int dynamicSpawnAmount;
 
 
     void Update()
     {
-        StaticSpawnChain();
+        DynamicSpawnChain();
     }
 
-    public void StaticSpawnChain()
+    public bool StaticSpawnChain()
     {
-        if (staticSpawnRunning) return;
-        InputData data = GlobalInputData.GetInstance().GetInputBySecondsBehind(startSecondsBehind);
-        print(data);
+        if (staticSpawnRunning) return false;
+
+        InputData data = GlobalInputData.GetInstance().GetInputBySecondsBehind(staticStartSecondsBehind);
+        if (data == null) return false;
+
         StartCoroutine(StaticSpawnChainCoroutine(data));
+        return true;
     }
     IEnumerator StaticSpawnChainCoroutine(InputData data)
     {
         staticSpawnRunning = true;
-        if (data != null)
+        for (int i = 0; i < staticSpawnAmount; i++)
         {
-            for (int i = 0; i < staticSpawnAmount; i++)
-            {
-                print(data);
-                SpawnEnemyWithInputFrame(data);
-                yield return new WaitForSeconds(staticSpawnIntervalSec);
-            }
+            SpawnEnemyWithInputFrame(data);
+            yield return new WaitForSeconds(staticSpawnIntervalSec);
         }
         staticSpawnRunning = false;
+    }
+
+    public bool DynamicSpawnChain()
+    {
+        if (dynamicSpawnRunning) return false;
+
+        if (Mathf.Ceil(dynamicSpawnAmount * dynamicSpawnDistanceSec) >= dynamicStartSecondsBehind)
+        {
+            print("EnemySpawnDynamicSpawnChain ERROR: Your spawn amount math does NOT add up. Lower spawnAmount or spawnDistanceSec.");
+            return false;
+        }
+
+        InputData data = GlobalInputData.GetInstance().GetInputBySecondsBehind(staticStartSecondsBehind);
+        if (data == null) return false;
+
+        List<InputData> dataSequence = new List<InputData>();
+        int start = data.GetIndex();
+        int interval = Mathf.FloorToInt(dynamicSpawnDistanceSec * GlobalInputData.DATA_PER_SECOND);
+        int end = start + (interval * dynamicSpawnAmount) - 1;
+        for (int i = start; i < end; i += interval)
+        {
+            InputData d = GlobalInputData.GetInstance().GetInput(i);
+            if (d == null) return false;
+            dataSequence.Add(d);
+        }
+        StartCoroutine(DynamicSpawnChainCoroutine(dataSequence));
+        return true;
+    }
+    IEnumerator DynamicSpawnChainCoroutine(List<InputData> dataSequence)
+    {
+        dynamicSpawnRunning = true;
+        for (int i = 0; i < dynamicSpawnAmount; i++)
+        {
+            print(dataSequence[i]);
+            SpawnEnemyWithInputFrame(dataSequence[i]);
+            yield return new WaitForSeconds(dynamicSpawnIntervalSec);
+        }
+        dynamicSpawnRunning = false;
     }
 
     void SpawnEnemyWithInputFrame(InputData inputData)

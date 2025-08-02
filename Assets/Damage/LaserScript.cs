@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LaserScript : MonoBehaviour
@@ -15,6 +16,10 @@ public class LaserScript : MonoBehaviour
     [SerializeField] LayerMask damageLayers;
     [SerializeField] DamageData damageData;
     [SerializeField] string context;
+
+    [Header("Loop Attack Params")]
+    [SerializeField] float chargeTime;
+    [SerializeField] float rotateSpeed;
 
     public void Initialize(GameObject attacker, int damage)
     {
@@ -34,6 +39,16 @@ public class LaserScript : MonoBehaviour
     {
         FireLaser(Vector2.right + Vector2.down);
     }
+
+    public void CircleAttack()
+    {
+
+    }
+    // IEnumerator CircleAttackCoroutine()
+    // {
+
+    // }
+
 
     void FireLaser(Vector2 aimDirection)
     {
