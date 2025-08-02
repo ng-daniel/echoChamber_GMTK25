@@ -23,17 +23,18 @@ public class EnemySpawnManager : MonoBehaviour
     public void StaticSpawnChain()
     {
         if (staticSpawnRunning) return;
-        StartCoroutine(StaticSpawnChainCoroutine());
+        InputData data = GlobalInputData.GetInstance().GetInputBySecondsBehind(startSecondsBehind);
+        print(data);
+        StartCoroutine(StaticSpawnChainCoroutine(data));
     }
-    IEnumerator StaticSpawnChainCoroutine()
+    IEnumerator StaticSpawnChainCoroutine(InputData data)
     {
         staticSpawnRunning = true;
-        InputData data = GlobalInputData.GetInstance().GetInputBySecondsBehind(startSecondsBehind);
         if (data != null)
         {
             for (int i = 0; i < staticSpawnAmount; i++)
             {
-                print("DATA: " + data.GetIndex());
+                print(data);
                 SpawnEnemyWithInputFrame(data);
                 yield return new WaitForSeconds(staticSpawnIntervalSec);
             }
@@ -47,7 +48,7 @@ public class EnemySpawnManager : MonoBehaviour
 
         GameObject newEnemy = Instantiate(enemyPrefab, inputData.GetPosition(), Quaternion.identity);
         EnemyController enemyController = newEnemy.GetComponent<EnemyController>();
-        enemyController.Initialize();
+        enemyController.Initialize(inputData);
         enemyList.Add(newEnemy);
     }
 

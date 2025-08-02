@@ -18,7 +18,7 @@ public class GlobalInputData : MonoBehaviour
         instance = this;
     }
 
-    Dictionary<int, InputData> inputData = new Dictionary<int, InputData>();
+    [SerializeField] Dictionary<int, InputData> inputData = new Dictionary<int, InputData>();
     const int DATA_PER_SECOND = 50; // due to fixed update always running 50 times per second
     [SerializeField] int maxTimeSeconds; // maximum history in seconds to store
     [SerializeField] float cleanseInterval;
@@ -33,8 +33,11 @@ public class GlobalInputData : MonoBehaviour
     public InputData GetInput(int index)
     {
         InputData data;
-        if (inputData.TryGetValue(index, out data)) return null;
-        return data;
+        if (inputData.TryGetValue(index, out data))
+        {
+            return new(data);
+        }
+        return null;
     }
     public InputData GetEarliestInput()
     {

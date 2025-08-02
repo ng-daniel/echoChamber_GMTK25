@@ -8,7 +8,7 @@ public class EnemyController : MonoBehaviour
 
     [Header("Read Input Parameters")]
     [SerializeField] int index;
-    bool startLoop = false;
+    bool isActive;
 
     // Start is called before the first frame update
     void Start()
@@ -16,21 +16,23 @@ public class EnemyController : MonoBehaviour
         characterStateManager = GetComponent<CharacterStateManager>();
     }
 
+    public void Initialize(InputData firstMove)
+    {
+        transform.position = firstMove.GetPosition();
+        this.index = firstMove.GetIndex();
+        ActivateEnemy();
+    }
     void FixedUpdate()
     {
-        InputData nextMove = GlobalInputData.GetInstance().GetInput(index);
-        characterStateManager.HandleInputs(nextMove);
-        index++;
+        if (isActive)
+        {
+            InputData nextMove = GlobalInputData.GetInstance().GetInput(index);
+            characterStateManager.HandleInputs(nextMove);
+            index++;
+        }
     }
-    public void Initialize()
+    public void ActivateEnemy()
     {
-        InputData nextMove = GlobalInputData.GetInstance().GetEarliestSafeInput();
-        transform.position = nextMove.GetPosition();
-        this.index = nextMove.GetIndex();
-    }
-
-    void StartLoop()
-    {
-        startLoop = true;
+        isActive = true;
     }
 }
