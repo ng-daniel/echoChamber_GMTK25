@@ -7,9 +7,10 @@ public class EnemyController : MonoBehaviour
 
     GlobalInputData globalInput;
     CharacterStateManager characterStateManager;
-    int currentStep = 0;
+
+    [Header("Read Input Parameters")]
+    [SerializeField] int index;
     bool startLoop = false;
-    GameObject target;
 
     // Start is called before the first frame update
     void Start()
@@ -20,19 +21,19 @@ public class EnemyController : MonoBehaviour
 
     void FixedUpdate()
     {
-        InputData nextMove = globalInput.GetInput(currentStep);
-        nextMove.SetAimDirection(nextMove.GetAimDirection() * -1);
+        InputData nextMove = globalInput.GetInput(index);
         characterStateManager.HandleInputs(nextMove);
-        currentStep++;
+        index++;
+    }
+    public void Initialize()
+    {
+        InputData nextMove = globalInput.GetEarliestInput();
+        transform.position = nextMove.GetPosition();
+        this.index = nextMove.GetIndex();
     }
 
     void StartLoop()
     {
         startLoop = true;
-    }
-
-    void SetAnimator(Animator animator)
-    {
-
     }
 }

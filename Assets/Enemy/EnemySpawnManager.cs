@@ -16,9 +16,6 @@ public class EnemySpawnManager : MonoBehaviour
     [SerializeField] float firstSpawnTimeSeconds;
     [SerializeField] float spawnIntervalSeconds;
     [SerializeField] float spawnIntervalVarianceSeconds;
-    float spawnTimer;
-    float variance = 0;
-
     [Header("Spawn Frame Parameters")]
     [SerializeField] int firstSpawnFrame;
     [SerializeField] int spawnFrameBackLogRange; // how many frames are required in GlobalInputData before
@@ -31,17 +28,22 @@ public class EnemySpawnManager : MonoBehaviour
 
     void Update()
     {
-        if (loopingSpawnEnabled)
-        {
-            spawnTimer += Time.deltaTime;
-            if (spawnTimer > spawnIntervalSeconds)
-            {
-                TrySpawnEnemyAtInputFrame(currentFrame);
-                IncrementCurrentFrame();
-                UpdateVariance();
-                spawnTimer = 0;
-            }
-        }
+        // if (loopingSpawnEnabled)
+        // {
+        //     spawnTimer += Time.deltaTime;
+        //     if (spawnTimer > spawnIntervalSeconds)
+        //     {
+        //         TrySpawnEnemyAtInputFrame(currentFrame);
+        //         IncrementCurrentFrame();
+        //         UpdateVariance();
+        //         spawnTimer = 0;
+        //     }
+        // }
+    }
+
+    public void SpawnChain()
+    {
+        //InputData data = 
     }
 
     bool TrySpawnEnemyAtInputFrame(int frame)
@@ -77,13 +79,5 @@ public class EnemySpawnManager : MonoBehaviour
     void ToggleLoopingSpawn(bool val)
     {
         loopingSpawnEnabled = val;
-    }
-    void IncrementCurrentFrame()
-    {
-        currentFrame = 0;
-    }
-    void UpdateVariance()
-    {
-        variance = Random.Range(-spawnIntervalVarianceSeconds, spawnIntervalVarianceSeconds);
     }
 }
