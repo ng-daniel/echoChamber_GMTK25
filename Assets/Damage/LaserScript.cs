@@ -8,6 +8,8 @@ public class LaserScript : MonoBehaviour
 
     [SerializeField] LineRenderer bigLineRenderer;
     [SerializeField] LineRenderer littleLineRenderer;
+    [SerializeField] GameObject beamParticles;
+    [SerializeField] GameObject splashParticles;
     [SerializeField] float minLittleWidth;
     [SerializeField] float maxLittleWidth;
     const int LASER_OFF = 0;
@@ -39,20 +41,18 @@ public class LaserScript : MonoBehaviour
     float rotateWindDownTimer;
 
 
-    public void Initialize(GameObject attacker, int damage)
+    public void Initialize(GameObject attacker, LaserParameters p)
     {
-        this.damageData = new(attacker, damage);
-        damageData.SetContext(context);
         rb = GetComponent<Rigidbody2D>();
-    }
 
-    void Start()
-    {
-        int damage = 1;
-        Initialize(this.gameObject, damage);
-        RotateAttackChain(Vector2.left + Vector2.down);
+        this.damageData = new(attacker, p.GetDamage());
+        this.rotateDegrees = p.GetRotateDegrees();
+        this.rotateChargeTimeSec = p.GetRotateChargeTimeSec();
+        this.rotateFireTimeSec = p.GetRotateFireTimeSec();
+        this.rotateWindDownTimeSec = p.GetRotateWindDownTimeSec();
+        this.windDownRotateDecrementSec = p.GetWindDownRotateDecrementSec();
+        damageData.SetContext(context);
     }
-
     public void RotateAttackChain(Vector2 initialDirection)
     {
         if (rotateAttackRunning) return;
@@ -98,7 +98,7 @@ public class LaserScript : MonoBehaviour
     {
         StartCoroutine(FlickerLaser(littleLineRenderer, flickerInterval, rotateWindDownTimeSec));
         StartCoroutine(AdjustLaserWidth(littleLineRenderer, rotateWindDownTimeSec, maxLittleWidth, minLittleWidth, new ScalarLerp()));
-        while (rotateWindDownTimer < rotateFireTimeSec)
+        while (rotateWindDownTimer < rotateWindDownTimeSec)
         {
             AddBodyRotation(rotateRate * Time.deltaTime);
             rotateRate -= rotateRate > 0 ? windDownRotateDecrementSec * Time.deltaTime : 0;
@@ -128,6 +128,7 @@ public class LaserScript : MonoBehaviour
             objectHealth.Damage(damageData);
         }
         SetLineRendererEndPoints(this.transform.position, hitPosition);
+        splashParticles.transform.position = hitPosition;
     }
     void SetBodyRotation(float val)
     {
@@ -148,16 +149,22 @@ public class LaserScript : MonoBehaviour
         {
             littleLineRenderer.gameObject.SetActive(false);
             bigLineRenderer.gameObject.SetActive(false);
+            splashParticles.SetActive(false);
+            beamParticles.SetActive(false);
         }
         if (code == BIG_LASER)
         {
             littleLineRenderer.gameObject.SetActive(false);
             bigLineRenderer.gameObject.SetActive(true);
+            splashParticles.SetActive(true);
+            beamParticles.SetActive(true);
         }
         if (code == LITTLE_LASER)
         {
             littleLineRenderer.gameObject.SetActive(true);
             bigLineRenderer.gameObject.SetActive(false);
+            splashParticles.SetActive(false);
+            beamParticles.SetActive(true);
         }
     }
     void SetLineRendererEndPoints(Vector2 start, Vector2 end)

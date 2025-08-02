@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 128313796, guid: 55613687db00f404a846dbaf44822568, type: 3}
+  m_Sprite: {fileID: 1540453973, guid: d0c43c355381eea4997638b80d92e56c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -164,12 +164,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 253216646, guid: 55613687db00f404a846dbaf44822568, type: 3}
+  m_Sprite: {fileID: -1959008272, guid: d0c43c355381eea4997638b80d92e56c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -275,6 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c8f198ea8398042a8e8c9b37ce9f80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthValue: 0
   maxHealth: 3
   predatorLayers:
     serializedVersion: 2

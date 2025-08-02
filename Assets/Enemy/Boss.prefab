@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c8f198ea8398042a8e8c9b37ce9f80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthValue: 0
   maxHealth: 100
   predatorLayers:
     serializedVersion: 2
@@ -135,7 +136,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0072790384, y: -0.12456775}
+  m_Offset: {x: -0.0072790384, y: -0.411702}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -146,7 +147,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.7826178, y: 3.1367164}
+  m_Size: {x: 2.7826178, y: 2.5624478}
   m_EdgeRadius: 0
 --- !u!114 &7683132173851779726
 MonoBehaviour:
@@ -160,3 +161,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e7b0b9acdddecc46a71f9d4ddccb47e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  laser: {fileID: 7437505143118166538, guid: 754205f35e903c443b8deada7f2682c4, type: 3}
+  distanceFromBoss: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
 
-    int healthValue;
+    [SerializeField] int healthValue;
     [SerializeField] int maxHealth;
     [SerializeField] LayerMask predatorLayers;
 
