@@ -56,11 +56,13 @@ public class BulletFunctionality : MonoBehaviour
         if (target == damageData.GetAttacker()) return false;
         Health hp = target.GetComponent<Health>();
         if (hp == null) return true;
-        hp.Damage(damageData);
+        print(damageData.GetDamage());
+        hp.Damage(new(damageData));
         return true;
     }
     void FizzleOut()
     {
+        print("HIT SOMETHING");
         Instantiate(particle, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }

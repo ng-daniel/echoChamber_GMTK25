@@ -147,6 +147,7 @@ public class CharacterStateManager : MonoBehaviour
         SetFireReady(false);
 
         BulletFunctionality b = Instantiate(bullet, gun.transform.position, Quaternion.identity).GetComponent<BulletFunctionality>();
+        print(bulletDamageData.GetDamage());
         b.Initialize(direction.normalized, gun.transform.rotation.eulerAngles.z, bulletSpeed, bulletDamageData);
     }
 

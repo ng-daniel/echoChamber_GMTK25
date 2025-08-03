@@ -39,10 +39,14 @@ public class Health : MonoBehaviour
     }
     public void Damage(DamageData damageData)
     {
+        damageData = new(damageData);
         if (!damageData.AttackerInLayer(predatorLayers)) return;
 
         damageData = DamageFilterChain(damageData);
-        if (damageData.GetDamage() == 0) return;
+        if (damageData.GetDamage() == 0)
+        {
+            return;
+        }
 
         if (healthValue <= 0)
         {
@@ -62,6 +66,10 @@ public class Health : MonoBehaviour
     {
         foreach (DamageFilter filter in damageFilterList) damageData = filter(damageData);
         return damageData;
+    }
+    public void ClearFilterList()
+    {
+        damageFilterList = new List<DamageFilter>();
     }
 
     public void SetHitEvent(HitEvent hitEvent)

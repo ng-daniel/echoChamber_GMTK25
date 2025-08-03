@@ -24,7 +24,6 @@ public class BossController : MonoBehaviour
     [SerializeField] GameObject serverPrefab;
     [SerializeField] List<Transform> serverPositions = new List<Transform>();
     List<GameObject> serverList = new List<GameObject>();
-    const int NUM_SERVERS = 4;
     [SerializeField] float serverDownTimeSec;
     [SerializeField] int minServerOperate;
     [SerializeField] int maxServerOperate;
@@ -35,7 +34,7 @@ public class BossController : MonoBehaviour
     {
         health = GetComponent<Health>();
         InitializeServers();
-        SetAttackEnabled(true);
+        //SetAttackEnabled(true);
     }
 
     void Update()
@@ -43,7 +42,7 @@ public class BossController : MonoBehaviour
         if (!initialOperate)
         {
             initialOperate = true;
-            OperateServers(NUM_SERVERS);
+            OperateServers(serverList.Count);
         }
 
         if (attackEnabled)
@@ -59,10 +58,10 @@ public class BossController : MonoBehaviour
         bool serversOperational = CheckServersOperational();
         if (shieldEnabled != serversOperational)
         {
+            print("adjusting invulnerability");
             SetShieldEnabled(serversOperational);
             AdjustInvulnerability(shieldEnabled);
         }
-        print(shieldEnabled);
 
         if (!shieldEnabled)
         {
@@ -71,6 +70,7 @@ public class BossController : MonoBehaviour
             {
                 int num = Random.Range(minServerOperate, maxServerOperate + 1);
                 OperateServers(num);
+                serverDownTimer = 0;
             }
         }
     }
@@ -94,7 +94,7 @@ public class BossController : MonoBehaviour
 
     void InitializeServers()
     {
-        for (int i = 0; i < NUM_SERVERS; i++)
+        for (int i = 0; i < serverPositions.Count; i++)
         {
             serverList.Add(Instantiate(serverPrefab, serverPositions[i].position, Quaternion.identity));
         }
@@ -114,6 +114,7 @@ public class BossController : MonoBehaviour
             ServerController server = tempServers[index].GetComponent<ServerController>();
             server.ResetServer();
             server.StartOperatingServer();
+            tempServers.RemoveAt(index);
         }
     }
     bool CheckServersOperational()
@@ -126,11 +127,12 @@ public class BossController : MonoBehaviour
     }
     void AdjustInvulnerability(bool val)
     {
-        if (val) health.damageFilterList.Add(InvulnerableFrameDamageFilter);
-        else health.damageFilterList.Remove(InvulnerableFrameDamageFilter);
+        if (val) health.damageFilterList.Add(BossInvunlerabilityDamageFilter);
+        else health.damageFilterList.Remove(BossInvunlerabilityDamageFilter);
     }
-    DamageData InvulnerableFrameDamageFilter(DamageData data)
+    DamageData BossInvunlerabilityDamageFilter(DamageData data)
     {
+        print("BOSS INVINCIBILITY");
         data.SetDamage(0);
         return data;
     }

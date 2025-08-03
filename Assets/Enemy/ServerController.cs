@@ -24,6 +24,7 @@ public class ServerController : MonoBehaviour
     {
         anim.ResetTrigger("start");
         anim.ResetTrigger("stop");
+        isOperating = false;
     }
 
     public void StartOperatingServer()
@@ -31,6 +32,7 @@ public class ServerController : MonoBehaviour
         isOperating = true;
         anim.SetTrigger("start");
         health.SetHealth(health.GetMaxHealth());
+        health.ClearFilterList();
     }
     void StopOperatingServer()
     {

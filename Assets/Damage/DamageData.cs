@@ -11,6 +11,14 @@ public class DamageData
     int multiplier = 1;
     String context;
 
+    public DamageData(DamageData data)
+    {
+        attacker = data.attacker;
+        damageVal = data.damageVal;
+        multiplier = data.multiplier;
+        context = data.context;
+    }
+
     public DamageData(GameObject attacker, int damageVal)
     {
         this.attacker = attacker;
