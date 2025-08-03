@@ -686,9 +686,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.0020544427
-    width: 0.99942225
-    height: 0.9964047
+    y: 0.0024125453
+    width: 0.99864316
+    height: 0.99396867
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -3045,15 +3045,15 @@ MonoBehaviour:
   staticStartSecondsBehind: 15
   staticSpawnIntervalSec: 1
   staticSpawnAmount: 5
-  dynamicStartSecondsBehind: 5
+  dynamicStartSecondsBehind: 15
   dynamicSpawnIntervalSec: 0.25
   dynamicSpawnDistanceSec: 0.5
   dynamicSpawnAmount: 6
-  spawnInterval: 15
+  spawnInterval: 18
   maxEnemies: 20
   limitCheckInterval: 0.25
   runStatic: 0
-  runDynamic: 0
+  runDynamic: 1
 --- !u!4 &2066229508
 Transform:
   m_ObjectHideFlags: 0
@@ -3204,9 +3204,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss
       objectReference: {fileID: 0}
-    - target: {fileID: 2611923628573845359, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
-      propertyPath: m_TagString
-      value: Boss
+    - target: {fileID: 5042608463485764308, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 10.3
       objectReference: {fileID: 0}
     - target: {fileID: 5175290931913176906, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3248,10 +3248,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7683132173851779726, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
-      propertyPath: deathVisual
-      value: 
-      objectReference: {fileID: 2558913230134107148, guid: 117929cd4ee3c844ba524a4d0186e56a, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

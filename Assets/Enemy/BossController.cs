@@ -171,7 +171,7 @@ public class BossController : MonoBehaviour
         GlobalEventHolder.OnDeath?.Invoke(gameObject);
         if (laserInstance != null) Destroy(laserInstance);
         Instantiate(deathVisual, transform.position, Quaternion.identity);
-        //SceneManager.SetActiveScene()
+        SceneScript.GetInstance().SetSceneAfterTime("WinScene", 5f);
         Destroy(gameObject);
     }
     public Vector2 Vector2FromAngle(float a)

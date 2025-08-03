@@ -4940,7 +4940,7 @@ GameObject:
   - component: {fileID: 7382803849673474121}
   m_Layer: 8
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5104,6 +5104,7 @@ MonoBehaviour:
   laserStartAngleOffset: 30
   shieldEnabled: 0
   shieldVisual: {fileID: 634328483919842050}
+  deathVisual: {fileID: 2558913230134107148, guid: 117929cd4ee3c844ba524a4d0186e56a, type: 3}
   serverPrefab: {fileID: 2169655961850427835, guid: b26780d18c528494abeacb72ab51ff0e, type: 3}
   serverPositions:
   - {fileID: 8247152654231430734}

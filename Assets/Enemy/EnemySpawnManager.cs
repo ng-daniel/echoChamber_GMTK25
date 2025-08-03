@@ -6,7 +6,7 @@ public class EnemySpawnManager : MonoBehaviour
 {
 
     [SerializeField] GameObject enemyPrefab;
-    static List<GameObject> enemyList = new List<GameObject>();
+    List<GameObject> enemyList = new List<GameObject>();
 
     [Header("Static Spawn Chain Params")]
     bool staticSpawnRunning = false;
@@ -85,6 +85,8 @@ public class EnemySpawnManager : MonoBehaviour
 
     public void InitializeSpawning()
     {
+
+        print("INITIALIZED ENEMYSPAWN");
         active = true;
         useDynamic = false;
         DynamicSpawnChain();
@@ -162,6 +164,8 @@ public class EnemySpawnManager : MonoBehaviour
     {
         if (victim.CompareTag("Player") || victim.CompareTag("Boss"))
         {
+            StopAllCoroutines();
+            active = false;
             GibbAllEnemies();
         }
     }
