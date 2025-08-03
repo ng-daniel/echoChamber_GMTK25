@@ -33,6 +33,10 @@ public class Health : MonoBehaviour
     {
         return healthValue;
     }
+    public int GetMaxHealth()
+    {
+        return maxHealth;
+    }
     public void Damage(DamageData damageData)
     {
         if (!damageData.AttackerInLayer(predatorLayers)) return;
@@ -74,6 +78,7 @@ public class Health : MonoBehaviour
     }
     public void DefaultDeathEvent()
     {
+        GlobalEventHolder.OnDeath?.Invoke(gameObject);
         Destroy(gameObject);
     }
     public void TriggerHitFlash()

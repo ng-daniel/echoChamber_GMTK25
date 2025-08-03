@@ -45,6 +45,4 @@ public class ArenaStateManager : MonoBehaviour
     {
         print("entering DEATH state");
     }
-
-
 }

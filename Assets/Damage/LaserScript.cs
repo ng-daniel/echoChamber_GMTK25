@@ -80,6 +80,10 @@ public class LaserScript : MonoBehaviour
         while (rotateChargeTimer < rotateChargeTimeSec)
         {
             AddBodyRotation(rotateDegrees * Time.deltaTime);
+            SetLineRendererEndPoints(
+                transform.position,
+                GetLaserDistance(GetDirectionFromRotation(rb.rotation))
+            );
 
             rotateChargeTimer += Time.deltaTime;
             yield return null;
@@ -109,6 +113,10 @@ public class LaserScript : MonoBehaviour
         while (rotateWindDownTimer < rotateWindDownTimeSec)
         {
             AddBodyRotation(rotateRate * Time.deltaTime);
+            SetLineRendererEndPoints(
+                transform.position,
+                GetLaserDistance(GetDirectionFromRotation(rb.rotation))
+            );
             rotateRate -= rotateRate > 0 ? windDownRotateDecrementSec * Time.deltaTime : 0;
 
             rotateWindDownTimer += Time.deltaTime;
@@ -119,11 +127,16 @@ public class LaserScript : MonoBehaviour
         rotateAttackRunning = false;
     }
 
+    Vector2 GetLaserDistance(Vector2 aimDirection)
+    {
+        RaycastHit2D hitRay = Physics2D.Raycast(this.transform.position, aimDirection, maxDistance, stopLayers);
+        return hitRay ? hitRay.point : aimDirection * maxDistance;
+    }
+
     void FireLaserFunction(Vector2 aimDirection)
     {
         // raycast to gague distance
-        RaycastHit2D hitRay = Physics2D.Raycast(this.transform.position, aimDirection, maxDistance, stopLayers);
-        Vector2 hitPosition = hitRay ? hitRay.point : aimDirection * maxDistance;
+        Vector2 hitPosition = GetLaserDistance(aimDirection);
 
         // circlecast to collide and damage
         RaycastHit2D[] hitCircle = Physics2D.CircleCastAll(this.transform.position, laserWidth / 2, aimDirection, maxDistance, damageLayers);
@@ -196,7 +209,7 @@ public class LaserScript : MonoBehaviour
     {
         while (timeVal > 0 && renderer.gameObject.activeSelf)
         {
-            renderer.startWidth = lerp.Operation(startWidth, targetWidth, timeVal / duration);
+            renderer.widthMultiplier = lerp.Operation(startWidth, targetWidth, timeVal / duration);
             timeVal -= Time.deltaTime;
             yield return null;
         }

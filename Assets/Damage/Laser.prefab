@@ -73,7 +73,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 10, y: 0, z: 1}
@@ -84,8 +84,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.15098053
-        value: 0.055950537
+        time: 0.06630188
+        value: 0.49645996
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -5039,7 +5039,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 10, y: 0, z: 1}
@@ -9958,7 +9958,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1224167415634759457
 Transform:
   m_ObjectHideFlags: 0
@@ -9995,7 +9995,7 @@ MonoBehaviour:
   beamParticles: {fileID: 4179893084180479966}
   splashParticles: {fileID: 7170885851502769685}
   minLittleWidth: 0.05
-  maxLittleWidth: 0.5
+  maxLittleWidth: 1
   maxDistance: 50
   laserWidth: 0.5
   stopLayers:

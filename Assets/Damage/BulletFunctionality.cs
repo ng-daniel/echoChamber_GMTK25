@@ -44,7 +44,6 @@ public class BulletFunctionality : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        print("hit something!");
         if (collision.gameObject.tag == this.gameObject.tag)
         {
             return;

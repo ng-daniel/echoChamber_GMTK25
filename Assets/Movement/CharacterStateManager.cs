@@ -191,6 +191,7 @@ public class CharacterStateManager : MonoBehaviour
         AcceptInputs(false);
         rb.velocity = Vector2.zero;
         col.enabled = false;
+        GlobalEventHolder.OnDeath?.Invoke(gameObject);
         StartCoroutine(DeathCoroutine());
     }
     IEnumerator DeathCoroutine()
