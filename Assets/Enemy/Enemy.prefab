@@ -215,7 +215,7 @@ MonoBehaviour:
   bullet: {fileID: 7452570255316139198, guid: d804e037d23291348bac4ffbe264cb76, type: 3}
   bulletSpeed: 7
   bulletDamage: 1
-  fireIntervalSeconds: 0.25
+  fireIntervalSeconds: 0.5
   gunDistanceFromBody: 0.5
   invulnerableDuration: 0
   hitFlashInterval: 0

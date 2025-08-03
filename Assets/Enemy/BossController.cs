@@ -7,6 +7,7 @@ public class BossController : MonoBehaviour
 {
 
     Health health;
+    Animator anim;
     [SerializeField] GameObject laser;
     [SerializeField] Transform laserOriginPoint;
     [SerializeField] LaserParameters rotateLaserParam;
@@ -16,9 +17,12 @@ public class BossController : MonoBehaviour
     [SerializeField] float attackIntervalSeconds;
     [SerializeField] float attackTimer;
     [SerializeField] float laserStartAngleOffset;
+    GameObject laserInstance;
 
     [Header("Shield Params")]
     [SerializeField] bool shieldEnabled;
+    [SerializeField] GameObject shieldVisual;
+    [SerializeField] GameObject deathVisual;
 
     [Header("Server Params")]
     [SerializeField] GameObject serverPrefab;
@@ -34,6 +38,7 @@ public class BossController : MonoBehaviour
     void Start()
     {
         health = GetComponent<Health>();
+        anim = GetComponent<Animator>();
         InitializeServers();
     }
 
@@ -93,8 +98,8 @@ public class BossController : MonoBehaviour
         }
         initialDirection = Quaternion.AngleAxis(laserStartAngleOffset, Vector3.forward) * initialDirection;
 
-        GameObject newLaser = Instantiate(laser, laserOriginPoint.position, Quaternion.identity);
-        LaserScript newLaserScript = newLaser.GetComponent<LaserScript>();
+        laserInstance = Instantiate(laser, laserOriginPoint.position, Quaternion.identity);
+        LaserScript newLaserScript = laserInstance.GetComponent<LaserScript>();
         newLaserScript.Initialize(this.gameObject, rotateLaserParam);
         newLaserScript.RotateAttackChain(initialDirection);
     }
@@ -151,11 +156,15 @@ public class BossController : MonoBehaviour
     public void SetShieldEnabled(bool val)
     {
         shieldEnabled = val;
+        shieldVisual.SetActive(val);
+        anim.SetBool("shieldEnabled", val);
     }
 
     public void DeathEvent()
     {
         GlobalEventHolder.OnDeath?.Invoke(gameObject);
+        if (laserInstance != null) Destroy(laserInstance);
+        Instantiate(deathVisual, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
     public Vector2 Vector2FromAngle(float a)
