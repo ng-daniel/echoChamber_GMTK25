@@ -119,8 +119,9 @@ MonoBehaviour:
   bulletDamage: 1
   fireIntervalSeconds: 0.25
   gunDistanceFromBody: 0.5
-  invulnerableDuration: 0
-  hitFlashInterval: 0
+  invulnerableDuration: 1
+  hitFlashInterval: 0.1
+  deathTimer: 4
 --- !u!50 &5598491805160936547
 Rigidbody2D:
   serializedVersion: 4

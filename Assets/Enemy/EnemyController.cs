@@ -20,7 +20,6 @@ public class EnemyController : MonoBehaviour
     {
         transform.position = firstMove.GetPosition();
         this.index = firstMove.GetIndex();
-        ActivateEnemy();
     }
     void FixedUpdate()
     {
@@ -34,5 +33,6 @@ public class EnemyController : MonoBehaviour
     public void ActivateEnemy()
     {
         isActive = true;
+        characterStateManager.ActivateCharacter();
     }
 }

@@ -8,6 +8,7 @@ public class CharacterStateManager : MonoBehaviour
 
     [SerializeField] bool isPlayer = false;
     Rigidbody2D rb;
+    Collider2D col;
     SpriteRenderer characterSprite;
     Animator anim;
     Health health;
@@ -43,18 +44,21 @@ public class CharacterStateManager : MonoBehaviour
     [Header("Hurt Params")]
     [SerializeField] float invulnerableDuration;
     [SerializeField] float hitFlashInterval;
+    [SerializeField] float deathTimer;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>();
         gunSprite = gun.GetComponent<SpriteRenderer>();
         characterSprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         health = GetComponent<Health>();
+        health.SetHitEvent(HitEvent);
         health.SetDeathEvent(DeathEvent);
         bulletDamageData = new(this.gameObject, bulletDamage);
     }
-    void ActivateCharacter()
+    public void ActivateCharacter()
     {
         acceptInputs = true;
         gun.SetActive(true);
@@ -185,6 +189,14 @@ public class CharacterStateManager : MonoBehaviour
     {
         anim.SetTrigger("death");
         AcceptInputs(false);
+        rb.velocity = Vector2.zero;
+        col.enabled = false;
+        StartCoroutine(DeathCoroutine());
+    }
+    IEnumerator DeathCoroutine()
+    {
+        yield return new WaitForSeconds(deathTimer);
+        Destroy(gameObject);
     }
 
     void SetMoving(bool val)

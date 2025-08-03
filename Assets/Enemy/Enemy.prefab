@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4489935489047378196
 Transform:
   m_ObjectHideFlags: 0
@@ -143,7 +143,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: adcf15e0550f6c6458136c157c85adba, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -200,10 +200,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dd099904def51941bfca5c063a205ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 0
+  acceptInputs: 0
+  invulnerable: 0
   isMoving: 0
   isDashing: 0
   isShooting: 0
-  isHit: 0
   speed: 5
   dashSpeed: 15
   dashTimeSeconds: 0.2
@@ -215,6 +217,9 @@ MonoBehaviour:
   bulletDamage: 1
   fireIntervalSeconds: 0.25
   gunDistanceFromBody: 0.5
+  invulnerableDuration: 0
+  hitFlashInterval: 0
+  deathTimer: 2
 --- !u!50 &4142565357714951767
 Rigidbody2D:
   serializedVersion: 4
@@ -252,7 +257,7 @@ Animator:
   m_GameObject: {fileID: 8599327069859435883}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1da4f2721557e75489d70464f38e4490, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -50,7 +50,7 @@ public class EnemySpawnManager : MonoBehaviour
             SpawnEnemyWithInputFrame(data);
             yield return new WaitForSeconds(staticSpawnIntervalSec);
         }
-        //staticSpawnRunning = false;
+        staticSpawnRunning = false;
     }
 
     public bool DynamicSpawnChain()

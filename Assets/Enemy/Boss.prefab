@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: adcf15e0550f6c6458136c157c85adba, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -162,4 +162,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   laser: {fileID: 7437505143118166538, guid: 754205f35e903c443b8deada7f2682c4, type: 3}
-  distanceFromBoss: 0
+  laserOriginPoint: {fileID: 0}
+  rotateLaserParam: {fileID: 0}

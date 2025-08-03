@@ -550,9 +550,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0
-    width: 1
-    height: 1
+    y: 0.055555556
+    width: 0.33333334
+    height: 0.3333333
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -1460,6 +1460,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4455360393951349810, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
+      propertyPath: invulnerableDuration
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7098533688387279882, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1747,6 +1751,8 @@ MonoBehaviour:
   dynamicSpawnIntervalSec: 0.25
   dynamicSpawnDistanceSec: 0.5
   dynamicSpawnAmount: 8
+  runStatic: 0
+  runDynamic: 0
 --- !u!4 &2066229508
 Transform:
   m_ObjectHideFlags: 0
@@ -1932,6 +1938,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Server
       objectReference: {fileID: 0}
+    - target: {fileID: 5792478411715433786, guid: b26780d18c528494abeacb72ab51ff0e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: adcf15e0550f6c6458136c157c85adba, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -15,8 +15,7 @@ public class Health : MonoBehaviour
     HitEvent OnHit;
     public delegate void DeathEvent();
     DeathEvent OnDeath;
-    const float hitFlashInterval = 0.1f;
-
+    const float hitFlashInterval = 0.07f;
 
     void Start()
     {
@@ -40,6 +39,12 @@ public class Health : MonoBehaviour
 
         damageData = DamageFilterChain(damageData);
         if (damageData.GetDamage() == 0) return;
+
+        if (healthValue <= 0)
+        {
+            healthValue = 0;
+            return;
+        }
 
         healthValue -= damageData.GetDamage();
         TriggerHitFlash();
