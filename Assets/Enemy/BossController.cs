@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BossController : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class BossController : MonoBehaviour
     GameObject laserInstance;
 
     [Header("Shield Params")]
-    [SerializeField] bool shieldEnabled;
+    [SerializeField] public bool shieldEnabled;
     [SerializeField] GameObject shieldVisual;
     [SerializeField] GameObject deathVisual;
 
@@ -38,6 +39,7 @@ public class BossController : MonoBehaviour
     void Start()
     {
         health = GetComponent<Health>();
+        health.SetDeathEvent(DeathEvent);
         anim = GetComponent<Animator>();
         InitializeServers();
     }
@@ -90,14 +92,9 @@ public class BossController : MonoBehaviour
     void LaserSpin()
     {
         print("FIRING LASER");
-        Vector2 initialDirection = Vector2.down;
-        GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
-        {
-            initialDirection = (player.transform.position - transform.position).normalized;
-        }
-        initialDirection = Quaternion.AngleAxis(laserStartAngleOffset, Vector3.forward) * initialDirection;
-
+        float randomAngle = Random.Range(0, 360);
+        Vector2 initialDirection = new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle)).normalized;
+        print(initialDirection);
         laserInstance = Instantiate(laser, laserOriginPoint.position, Quaternion.identity);
         LaserScript newLaserScript = laserInstance.GetComponent<LaserScript>();
         newLaserScript.Initialize(this.gameObject, rotateLaserParam);
@@ -137,6 +134,15 @@ public class BossController : MonoBehaviour
         }
         return false;
     }
+    public int GetOperatingServersCount()
+    {
+        int count = 0;
+        foreach (GameObject server in serverList)
+        {
+            if (server.GetComponent<ServerController>().IsOperating()) count++;
+        }
+        return count;
+    }
     void AdjustInvulnerability(bool val)
     {
         if (val) health.damageFilterList.Add(BossInvunlerabilityDamageFilter);
@@ -165,6 +171,7 @@ public class BossController : MonoBehaviour
         GlobalEventHolder.OnDeath?.Invoke(gameObject);
         if (laserInstance != null) Destroy(laserInstance);
         Instantiate(deathVisual, transform.position, Quaternion.identity);
+        //SceneManager.SetActiveScene()
         Destroy(gameObject);
     }
     public Vector2 Vector2FromAngle(float a)

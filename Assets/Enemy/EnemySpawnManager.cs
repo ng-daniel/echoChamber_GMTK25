@@ -86,8 +86,8 @@ public class EnemySpawnManager : MonoBehaviour
     public void InitializeSpawning()
     {
         active = true;
-        useDynamic = true;
-        spawnTimer = spawnInterval;
+        useDynamic = false;
+        DynamicSpawnChain();
     }
 
     public bool StaticSpawnChain()
@@ -160,7 +160,7 @@ public class EnemySpawnManager : MonoBehaviour
     }
     void CheckPlayerDeadOnDeath(GameObject victim)
     {
-        if (victim.CompareTag("Player"))
+        if (victim.CompareTag("Player") || victim.CompareTag("Boss"))
         {
             GibbAllEnemies();
         }

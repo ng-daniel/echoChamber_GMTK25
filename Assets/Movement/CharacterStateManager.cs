@@ -190,6 +190,7 @@ public class CharacterStateManager : MonoBehaviour
     {
         anim.SetTrigger("death");
         AcceptInputs(false);
+        SetDashing(false);
         rb.velocity = Vector2.zero;
         col.enabled = false;
         GlobalEventHolder.OnDeath?.Invoke(gameObject);
@@ -198,6 +199,7 @@ public class CharacterStateManager : MonoBehaviour
     IEnumerator DeathCoroutine()
     {
         yield return new WaitForSeconds(deathTimer);
+        if (isPlayer) SceneScript.GetInstance().SetSceneAfterTime("LoseScene", 1f);
         Destroy(gameObject);
     }
 

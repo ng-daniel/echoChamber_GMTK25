@@ -67,7 +67,10 @@ public class LaserScript : MonoBehaviour
         rotateChargeTimer = 0;
         rotateFireTimer = 0;
 
-        SetBodyRotation(Vector2.Angle(Vector2.right, initialDirection));
+
+        float angleDegRaw = Vector2.Angle(initialDirection, Vector2.right);
+        float angleDeg = initialDirection.y > 0 ? angleDegRaw : 180 + (180 - angleDegRaw);
+        SetBodyRotation(angleDeg);
         ToggleLaserRenderer(LITTLE_LASER);
         StartCoroutine(RotateChargeCoroutine());
     }
