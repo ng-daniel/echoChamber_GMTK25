@@ -9,13 +9,13 @@ public class EnemySpawnManager : MonoBehaviour
     List<GameObject> enemyList = new List<GameObject>();
 
     [Header("Static Spawn Chain Params")]
-    bool staticSpawnRunning = false;
+    [SerializeField] bool staticSpawnRunning = false;
     [SerializeField] int staticStartSecondsBehind;
     [SerializeField] float staticSpawnIntervalSec;
     [SerializeField] int staticSpawnAmount;
 
     [Header("Dynamic Spawn Chain Params")]
-    bool dynamicSpawnRunning = false;
+    [SerializeField] bool dynamicSpawnRunning = false;
     [SerializeField] int dynamicStartSecondsBehind;
     [SerializeField] float dynamicSpawnIntervalSec;
     [SerializeField] float dynamicSpawnDistanceSec;
@@ -85,10 +85,10 @@ public class EnemySpawnManager : MonoBehaviour
 
     public void InitializeSpawning()
     {
-
         print("INITIALIZED ENEMYSPAWN");
         active = true;
         useDynamic = false;
+        spawnTimer = 0;
         DynamicSpawnChain();
     }
 
@@ -184,11 +184,12 @@ public class EnemySpawnManager : MonoBehaviour
             print("Limiting Enemies!");
             GameObject victim = enemyList[0];
             enemyList.Remove(victim);
-            InstaGibb(victim);
+            if (victim != null) InstaGibb(victim);
         }
     }
     void InstaGibb(GameObject victim)
     {
+        if (victim == null) return;
         victim.GetComponent<Health>().Damage(new DamageData(this.gameObject, 99999999)); // mods, ban this guy
     }
 

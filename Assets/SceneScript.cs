@@ -13,6 +13,7 @@ public class SceneScript : MonoBehaviour
     {
         return instance;
     }
+    bool changingScenes;
     void Start()
     {
         instance = this;
@@ -24,10 +25,12 @@ public class SceneScript : MonoBehaviour
 
     public void SetSceneAfterTime(String name, float seconds)
     {
+        if (changingScenes) return;
         StartCoroutine(SetSceneCoroutine(name, seconds));
     }
     IEnumerator SetSceneCoroutine(String name, float seconds)
     {
+        changingScenes = true;
         yield return new WaitForSeconds(seconds);
         SceneManager.LoadScene(name);
     }

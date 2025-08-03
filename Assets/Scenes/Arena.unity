@@ -686,9 +686,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.0024125453
-    width: 0.99864316
-    height: 0.99396867
+    y: 0
+    width: 1.0854816
+    height: 2.0747888
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -3053,7 +3053,7 @@ MonoBehaviour:
   maxEnemies: 20
   limitCheckInterval: 0.25
   runStatic: 0
-  runDynamic: 1
+  runDynamic: 0
 --- !u!4 &2066229508
 Transform:
   m_ObjectHideFlags: 0

@@ -42,9 +42,11 @@ public class BossController : MonoBehaviour
         health.SetDeathEvent(DeathEvent);
         anim = GetComponent<Animator>();
         InitializeServers();
+        SetShieldEnabled(true);
+        AdjustInvulnerability(shieldEnabled);
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (!initialOperate)
         {
