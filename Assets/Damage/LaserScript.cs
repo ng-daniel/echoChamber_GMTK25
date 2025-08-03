@@ -15,6 +15,7 @@ public class LaserScript : MonoBehaviour
     const int LASER_OFF = 0;
     const int BIG_LASER = 1;
     const int LITTLE_LASER = 2;
+    const int defaultDamage = 1;
     Rigidbody2D rb;
 
     [Header("Laser Config Settings")]
@@ -45,12 +46,19 @@ public class LaserScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        this.damageData = new(attacker, p.GetDamage());
-        this.rotateDegrees = p.GetRotateDegrees();
-        this.rotateChargeTimeSec = p.GetRotateChargeTimeSec();
-        this.rotateFireTimeSec = p.GetRotateFireTimeSec();
-        this.rotateWindDownTimeSec = p.GetRotateWindDownTimeSec();
-        this.windDownRotateDecrementSec = p.GetWindDownRotateDecrementSec();
+        if (p != null)
+        {
+            this.damageData = new(attacker, p.GetDamage());
+            this.rotateDegrees = p.GetRotateDegrees();
+            this.rotateChargeTimeSec = p.GetRotateChargeTimeSec();
+            this.rotateFireTimeSec = p.GetRotateFireTimeSec();
+            this.rotateWindDownTimeSec = p.GetRotateWindDownTimeSec();
+            this.windDownRotateDecrementSec = p.GetWindDownRotateDecrementSec();
+        }
+        else
+        {
+            this.damageData = new(attacker, defaultDamage);
+        }
         damageData.SetContext(context);
     }
     public void RotateAttackChain(Vector2 initialDirection)

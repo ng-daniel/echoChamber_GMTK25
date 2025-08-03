@@ -41,6 +41,10 @@ public class DamageData
     {
         return damageVal * multiplier;
     }
+    public void SetDamage(int val)
+    {
+        damageVal = val;
+    }
     public int GetDamageRaw()
     {
         return damageVal;

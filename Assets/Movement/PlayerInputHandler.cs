@@ -31,7 +31,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (player != null)
         {
             currentInput = GenerateCurrentPlayerInput();
-            SendPlayerCharacterInputs(currentInput);
+            TrySendPlayerCharacterInputs(currentInput);
         }
     }
 
@@ -55,10 +55,13 @@ public class PlayerInputHandler : MonoBehaviour
         );
         return data;
     }
-    void SendPlayerCharacterInputs(InputData data)
+    void TrySendPlayerCharacterInputs(InputData data)
     {
-        playerStateManager.HandleInputs(data);
-        GlobalInputData.GetInstance().RecordInput(data);
+        bool result = playerStateManager.HandleInputs(data);
+        if (result == true)
+        {
+            GlobalInputData.GetInstance().RecordInput(data);
+        }
     }
     public InputData GetCurrentInputData()
     {

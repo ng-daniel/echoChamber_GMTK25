@@ -21,10 +21,15 @@ public class EnemySpawnManager : MonoBehaviour
     [SerializeField] float dynamicSpawnDistanceSec;
     [SerializeField] int dynamicSpawnAmount;
 
+    [Header("Testing")]
+    [SerializeField] bool runStatic;
+    [SerializeField] bool runDynamic;
+
 
     void Update()
     {
-        if (!staticSpawnRunning) StaticSpawnChain();
+        if (runStatic) StaticSpawnChain();
+        else if (runDynamic) DynamicSpawnChain();
     }
 
     public bool StaticSpawnChain()

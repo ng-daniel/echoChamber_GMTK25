@@ -6,16 +6,19 @@ using UnityEngine;
 public class CharacterStateManager : MonoBehaviour
 {
 
+    [SerializeField] bool isPlayer = false;
     Rigidbody2D rb;
     SpriteRenderer characterSprite;
+    Animator anim;
+    Health health;
 
 
     [Header("State Booleans")]
+    [SerializeField] bool acceptInputs = false;
+    [SerializeField] bool invulnerable;
     [SerializeField] bool isMoving;
     [SerializeField] bool isDashing;
     [SerializeField] bool isShooting;
-    [SerializeField] bool isHit;
-
     [Header("Movement")]
     [SerializeField] float speed;
     [SerializeField] float dashSpeed;
@@ -37,22 +40,37 @@ public class CharacterStateManager : MonoBehaviour
     float fireTimer = 0f;
     bool fireReady = false;
 
-    // Start is called before the first frame update
+    [Header("Hurt Params")]
+    [SerializeField] float invulnerableDuration;
+    [SerializeField] float hitFlashInterval;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         gunSprite = gun.GetComponent<SpriteRenderer>();
         characterSprite = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
+        health = GetComponent<Health>();
+        health.SetDeathEvent(DeathEvent);
         bulletDamageData = new(this.gameObject, bulletDamage);
+    }
+    void ActivateCharacter()
+    {
+        acceptInputs = true;
+        gun.SetActive(true);
     }
 
     void Update()
     {
+        UpdateAnimatorParams();
         if (isDashing || !dashReady)
         {
             dashTimer += Time.deltaTime;
 
-            if (dashTimer > dashTimeSeconds) SetDashing(false);
+            if (dashTimer > dashTimeSeconds)
+            {
+                SetDashing(false);
+            }
             if (isDashing) rb.velocity = dashDirection.normalized * dashSpeed;
 
             if (dashTimer > dashTimeSeconds + dashCooldownSeconds)
@@ -73,21 +91,19 @@ public class CharacterStateManager : MonoBehaviour
         }
     }
 
-    public void HandleInputs(InputData inputData)
+    public bool HandleInputs(InputData inputData)
     {
-        //print(inputData);
-        if (inputData.IsDashPress() && inputData.GetMoveDirection() != Vector2.zero)
-        {
-            Dash(inputData.GetMoveDirection());
-        }
+        if (!acceptInputs) return false;
 
-        if (isDashing) return;
+        if (inputData.IsDashPress() && inputData.GetMoveDirection() != Vector2.zero) Dash(inputData.GetMoveDirection());
+        if (isDashing) return true;
 
         if (inputData.IsMouseHold() && fireReady) FireBullet(inputData.GetAimDirection());
         SetShooting(inputData.IsMouseHold() && !isDashing);
 
         AimGun(inputData.GetAimDirection());
         Move(inputData.GetMoveDirection());
+        return true;
     }
 
     void AimGun(Vector2 direction)
@@ -130,6 +146,47 @@ public class CharacterStateManager : MonoBehaviour
         b.Initialize(direction.normalized, gun.transform.rotation.eulerAngles.z, bulletSpeed, bulletDamageData);
     }
 
+    void HitEvent()
+    {
+        if (isPlayer)
+        {
+            StartCoroutine(InvulnerableCoroutine());
+        }
+    }
+    IEnumerator InvulnerableCoroutine()
+    {
+        invulnerable = true;
+        health.damageFilterList.Add(InvulnerableFrameDamageFilter);
+        StartCoroutine(BlinkingFlash());
+
+        yield return new WaitForSeconds(invulnerableDuration);
+
+        health.damageFilterList.Remove(InvulnerableFrameDamageFilter);
+        invulnerable = false;
+    }
+    IEnumerator BlinkingFlash()
+    {
+        while (invulnerable == true)
+        {
+            characterSprite.material.SetFloat("_FlashAmount", 1);
+            yield return new WaitForSeconds(hitFlashInterval);
+            characterSprite.material.SetFloat("_FlashAmount", 0);
+            yield return new WaitForSeconds(hitFlashInterval);
+            yield return null;
+        }
+    }
+    DamageData InvulnerableFrameDamageFilter(DamageData data)
+    {
+        data.SetDamage(0);
+        return data;
+    }
+
+    void DeathEvent()
+    {
+        anim.SetTrigger("death");
+        AcceptInputs(false);
+    }
+
     void SetMoving(bool val)
     {
         isMoving = val;
@@ -149,5 +206,15 @@ public class CharacterStateManager : MonoBehaviour
     void SetDashReady(bool val)
     {
         dashReady = val;
+    }
+    void AcceptInputs(bool val)
+    {
+        acceptInputs = val;
+    }
+    void UpdateAnimatorParams()
+    {
+        anim.SetBool("moving", isMoving);
+        anim.SetBool("dashing", isDashing);
+        anim.SetBool("shooting", isShooting);
     }
 }
