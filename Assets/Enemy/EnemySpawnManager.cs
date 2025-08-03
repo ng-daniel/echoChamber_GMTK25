@@ -21,15 +21,59 @@ public class EnemySpawnManager : MonoBehaviour
     [SerializeField] float dynamicSpawnDistanceSec;
     [SerializeField] int dynamicSpawnAmount;
 
+    [Header("Spawning Control Params")]
+    bool active;
+    bool useDynamic;
+    [SerializeField] float spawnInterval;
+    float spawnTimer;
+
+    [Header("Enemy Limit Params")]
+    [SerializeField] int maxEnemies;
+
+
     [Header("Testing")]
     [SerializeField] bool runStatic;
     [SerializeField] bool runDynamic;
 
 
+    void Awake()
+    {
+        GlobalEventHolder.OnInitialServerClear += InitializeSpawning;
+    }
+    void OnDestroy()
+    {
+        GlobalEventHolder.OnInitialServerClear -= InitializeSpawning;
+    }
+
     void Update()
     {
-        if (runStatic) StaticSpawnChain();
-        else if (runDynamic) DynamicSpawnChain();
+        // if (runStatic) StaticSpawnChain();
+        // else if (runDynamic) DynamicSpawnChain();
+
+        if (active)
+        {
+            spawnTimer += Time.deltaTime;
+            if (spawnTimer > spawnInterval)
+            {
+                if (useDynamic)
+                {
+                    DynamicSpawnChain();
+                }
+                else
+                {
+                    StaticSpawnChain();
+                }
+                spawnTimer = 0;
+                useDynamic = !useDynamic;
+            }
+        }
+    }
+
+    public void InitializeSpawning()
+    {
+        active = true;
+        useDynamic = true;
+        spawnTimer = spawnInterval;
     }
 
     public bool StaticSpawnChain()
@@ -100,10 +144,13 @@ public class EnemySpawnManager : MonoBehaviour
         enemyController.Initialize(inputData);
         enemyList.Add(newEnemy);
     }
-
-    public static void OnEnemyDeath(GameObject deadEnemy)
+    void LimitEnemiesFunction()
     {
-        // actions
-        enemyList.Remove(deadEnemy);
+
+    }
+
+    public void CheckAndRemoveEnemyOnDeath(GameObject victim)
+    {
+        if (victim.GetComponent<EnemyController>() != null) enemyList.Remove(victim);
     }
 }

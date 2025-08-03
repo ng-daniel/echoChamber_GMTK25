@@ -7,4 +7,7 @@ public class GlobalEventHolder : MonoBehaviour
     public delegate void DeathEvent(GameObject victim);
     public static DeathEvent OnDeath;
 
+    public delegate void InitialServerClear();
+    public static InitialServerClear OnInitialServerClear;
+
 }

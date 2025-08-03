@@ -29,12 +29,12 @@ public class BossController : MonoBehaviour
     [SerializeField] int maxServerOperate;
     [SerializeField] float serverDownTimer;
     bool initialOperate;
+    bool initialServerClear;
 
     void Start()
     {
         health = GetComponent<Health>();
         InitializeServers();
-        //SetAttackEnabled(true);
     }
 
     void Update()
@@ -65,6 +65,13 @@ public class BossController : MonoBehaviour
 
         if (!shieldEnabled)
         {
+            if (!initialServerClear)
+            {
+                GlobalEventHolder.OnInitialServerClear?.Invoke();
+                SetAttackEnabled(true);
+                initialServerClear = true;
+            }
+
             serverDownTimer += Time.deltaTime;
             if (serverDownTimer > serverDownTimeSec)
             {
