@@ -75,7 +75,7 @@ public class CharacterStateManager : MonoBehaviour
             {
                 SetDashing(false);
             }
-            if (isDashing) rb.velocity = dashDirection.normalized * dashSpeed;
+            if (isDashing) rb.linearVelocity = dashDirection.normalized * dashSpeed;
 
             if (dashTimer > dashTimeSeconds + dashCooldownSeconds)
             {
@@ -131,7 +131,7 @@ public class CharacterStateManager : MonoBehaviour
     {
         bool movingValue = direction == Vector2.zero ? false : true;
         SetMoving(movingValue);
-        rb.velocity = direction.normalized * speed;
+        rb.linearVelocity = direction.normalized * speed;
     }
 
     void Dash(Vector2 direction)
@@ -191,7 +191,7 @@ public class CharacterStateManager : MonoBehaviour
         anim.SetTrigger("death");
         AcceptInputs(false);
         SetDashing(false);
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         col.enabled = false;
         GlobalEventHolder.OnDeath?.Invoke(gameObject);
         StartCoroutine(DeathCoroutine());

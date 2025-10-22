@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BossController : MonoBehaviour
+public class MachineBossController : MonoBehaviour
 {
 
     Health health;
@@ -18,7 +18,7 @@ public class BossController : MonoBehaviour
     [SerializeField] float attackIntervalSeconds;
     [SerializeField] float attackTimer;
     [SerializeField] float laserStartAngleOffset;
-    GameObject laserInstance;
+    List<GameObject> laserInstances = new List<GameObject>();
 
     [Header("Shield Params")]
     [SerializeField] public bool shieldEnabled;
@@ -59,7 +59,14 @@ public class BossController : MonoBehaviour
             attackTimer += Time.deltaTime;
             if (attackTimer > attackIntervalSeconds)
             {
-                LaserSpin();
+                if (shieldEnabled)
+                {
+                    LaserSpin(Random.Range(0, 360));
+                }
+                else
+                {
+                    MultiLaserSpin(Random.Range(0, 360), 3);
+                }
                 attackTimer = 0;
             }
         }
@@ -91,16 +98,27 @@ public class BossController : MonoBehaviour
         }
     }
 
-    void LaserSpin()
+    void MultiLaserSpin(float startingAngle, int numLasers)
     {
-        print("FIRING LASER");
-        float randomAngle = Random.Range(0, 360);
-        Vector2 initialDirection = new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle)).normalized;
+        float angleIncrement = 360f / numLasers;
+        for (int i = 0; i < numLasers; i += 1)
+        {
+            float targetAngle = (startingAngle + angleIncrement * i) % 360;
+            LaserSpin(targetAngle);
+            print("ANGLE_" + i + ": " + targetAngle);
+        }
+    }
+    void LaserSpin(float firingAngle)
+    {
+        float firingAngleRad = firingAngle * Mathf.Deg2Rad;
+        Vector2 initialDirection = new Vector2(Mathf.Cos(firingAngleRad), Mathf.Sin(firingAngleRad)).normalized;
+        print("INIT DIR: " + initialDirection);
         print(initialDirection);
-        laserInstance = Instantiate(laser, laserOriginPoint.position, Quaternion.identity);
-        LaserScript newLaserScript = laserInstance.GetComponent<LaserScript>();
+        GameObject newLaser = Instantiate(laser, laserOriginPoint.position, Quaternion.identity);
+        LaserScript newLaserScript = newLaser.GetComponent<LaserScript>();
         newLaserScript.Initialize(this.gameObject, rotateLaserParam);
         newLaserScript.RotateAttackChain(initialDirection);
+        laserInstances.Add(newLaser);
     }
 
     void InitializeServers()
@@ -167,11 +185,14 @@ public class BossController : MonoBehaviour
         shieldVisual.SetActive(val);
         anim.SetBool("shieldEnabled", val);
     }
-
     public void DeathEvent()
     {
         GlobalEventHolder.OnDeath?.Invoke(gameObject);
-        if (laserInstance != null) Destroy(laserInstance);
+        foreach (GameObject g in laserInstances)
+        {
+            Destroy(g);
+        }
+        laserInstances = new List<GameObject>();
         Instantiate(deathVisual, transform.position, Quaternion.identity);
         SceneScript.GetInstance().SetSceneAfterTime("WinScene", 5f);
         Destroy(gameObject);

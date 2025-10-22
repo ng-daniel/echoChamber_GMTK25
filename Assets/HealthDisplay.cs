@@ -40,8 +40,8 @@ public class HealthDisplay : MonoBehaviour
         bossHP.text = "MACHINE_HP: " + bhp;
         playerHP.text = "SELF_HP: " + php;
 
-        string sUp = boss ? boss.GetComponent<BossController>().shieldEnabled + "" : ":)";
-        string sLeft = boss ? boss.GetComponent<BossController>().GetOperatingServersCount() + "" : ":)";
+        string sUp = boss ? boss.GetComponent<MachineBossController>().shieldEnabled + "" : ":)";
+        string sLeft = boss ? boss.GetComponent<MachineBossController>().GetOperatingServersCount() + "" : ":)";
         shieldUp.text = "MACHINE_SHIELD: " + sUp;
         serversLeft.text = "N_SERVERS: " + sLeft;
     }

@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4315943192676859691}
   m_Layer: 0
   m_Name: EnemyBullet
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,7 +127,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1152
+    m_Bits: 3456
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0

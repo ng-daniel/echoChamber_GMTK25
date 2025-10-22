@@ -29,7 +29,7 @@ public class BulletFunctionality : MonoBehaviour
 
     void Update()
     {
-        rb.velocity = direction.normalized * speed;
+        rb.linearVelocity = direction.normalized * speed;
 
         rb.rotation += rotationSpeed * Time.deltaTime;
         rb.rotation = rb.rotation >= 360 ? 0 : rb.rotation;

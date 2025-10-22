@@ -62,16 +62,17 @@ public class EnemySpawnManager : MonoBehaviour
             spawnTimer += Time.deltaTime;
             if (spawnTimer > spawnInterval)
             {
-                if (useDynamic)
-                {
-                    DynamicSpawnChain();
-                }
-                else
-                {
-                    StaticSpawnChain();
-                }
+                DynamicSpawnChain();
+                // if (useDynamic)
+                // {
+                //     DynamicSpawnChain();
+                // }
+                // else
+                // {
+                //     StaticSpawnChain();
+                // }
+                // useDynamic = !useDynamic;
                 spawnTimer = 0;
-                useDynamic = !useDynamic;
             }
 
             limitCheckTimer += Time.deltaTime;

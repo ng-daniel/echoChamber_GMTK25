@@ -4939,7 +4939,7 @@ GameObject:
   - component: {fileID: 8028422193256500524}
   - component: {fileID: 7382803849673474121}
   m_Layer: 8
-  m_Name: Boss
+  m_Name: MachineBoss
   m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
