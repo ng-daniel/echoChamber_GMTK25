@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterStateManager : MonoBehaviour
+public class EchoStateManager : MonoBehaviour
 {
 
     [SerializeField] bool isPlayer = false;
@@ -11,8 +11,6 @@ public class CharacterStateManager : MonoBehaviour
     Collider2D col;
     SpriteRenderer characterSprite;
     Animator anim;
-    Health health;
-
 
     [Header("State Booleans")]
     [SerializeField] bool acceptInputs = false;
@@ -20,6 +18,7 @@ public class CharacterStateManager : MonoBehaviour
     [SerializeField] bool isMoving;
     [SerializeField] bool isDashing;
     [SerializeField] bool isShooting;
+
     [Header("Movement")]
     [SerializeField] float speed;
     [SerializeField] float dashSpeed;
@@ -27,8 +26,8 @@ public class CharacterStateManager : MonoBehaviour
     [SerializeField] float dashCooldownSeconds;
     float dashTimer = 0f;
     [SerializeField] bool dashReady = true;
-
     Vector2 dashDirection;
+
     [Header("Shooting")]
     [SerializeField] GameObject gun;
     SpriteRenderer gunSprite;
@@ -53,17 +52,20 @@ public class CharacterStateManager : MonoBehaviour
         gunSprite = gun.GetComponent<SpriteRenderer>();
         characterSprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-        health = GetComponent<Health>();
-        health.SetHitEvent(HitEvent);
-        health.SetDeathEvent(DeathEvent);
         bulletDamageData = new(this.gameObject, bulletDamage);
     }
-    public void ActivateCharacter()
+    public void Activate()
     {
         acceptInputs = true;
         gun.SetActive(true);
     }
-
+    public void Deactivate()
+    {
+        AcceptInputs(false);
+        SetDashing(false);
+        rb.linearVelocity = Vector2.zero;
+        col.enabled = false;
+    }
     void Update()
     {
         UpdateAnimatorParams();
@@ -149,58 +151,6 @@ public class CharacterStateManager : MonoBehaviour
         BulletFunctionality b = Instantiate(bullet, gun.transform.position, Quaternion.identity).GetComponent<BulletFunctionality>();
         print(bulletDamageData.GetDamage());
         b.Initialize(direction.normalized, gun.transform.rotation.eulerAngles.z, bulletSpeed, bulletDamageData);
-    }
-
-    void HitEvent()
-    {
-        if (isPlayer)
-        {
-            StartCoroutine(InvulnerableCoroutine());
-        }
-    }
-    IEnumerator InvulnerableCoroutine()
-    {
-        invulnerable = true;
-        health.damageFilterList.Add(InvulnerableFrameDamageFilter);
-        StartCoroutine(BlinkingFlash());
-
-        yield return new WaitForSeconds(invulnerableDuration);
-
-        health.damageFilterList.Remove(InvulnerableFrameDamageFilter);
-        invulnerable = false;
-    }
-    IEnumerator BlinkingFlash()
-    {
-        while (invulnerable == true)
-        {
-            characterSprite.material.SetFloat("_FlashAmount", 1);
-            yield return new WaitForSeconds(hitFlashInterval);
-            characterSprite.material.SetFloat("_FlashAmount", 0);
-            yield return new WaitForSeconds(hitFlashInterval);
-            yield return null;
-        }
-    }
-    DamageData InvulnerableFrameDamageFilter(DamageData data)
-    {
-        data.SetDamage(0);
-        return data;
-    }
-
-    void DeathEvent()
-    {
-        anim.SetTrigger("death");
-        AcceptInputs(false);
-        SetDashing(false);
-        rb.linearVelocity = Vector2.zero;
-        col.enabled = false;
-        GlobalEventHolder.OnDeath?.Invoke(gameObject);
-        StartCoroutine(DeathCoroutine());
-    }
-    IEnumerator DeathCoroutine()
-    {
-        yield return new WaitForSeconds(deathTimer);
-        if (isPlayer) SceneScript.GetInstance().SetSceneAfterTime("LoseScene", 1f);
-        Destroy(gameObject);
     }
 
     void SetMoving(bool val)

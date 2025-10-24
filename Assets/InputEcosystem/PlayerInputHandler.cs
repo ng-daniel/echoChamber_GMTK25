@@ -8,7 +8,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     GameObject player;
     PlayerInput input;
-    CharacterStateManager playerStateManager;
+    EchoStateManager playerStateManager;
     InputAction moveAction;
     InputAction dashAction;
     InputData currentInput;
@@ -20,7 +20,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         input = GetComponent<PlayerInput>();
-        playerStateManager = player.GetComponent<CharacterStateManager>();
+        playerStateManager = player.GetComponent<EchoStateManager>();
         moveAction = input.actions.FindAction("Move");
         dashAction = input.actions.FindAction("Dash");
     }

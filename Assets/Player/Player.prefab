@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4455360393951349810}
   - component: {fileID: 5598491805160936547}
   - component: {fileID: 103752756455156656}
+  - component: {fileID: 4731845848353543071}
   - component: {fileID: 5643675069832440201}
   - component: {fileID: 8287990239549064259}
   m_Layer: 6
@@ -55,6 +56,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -124,7 +128,7 @@ MonoBehaviour:
   deathTimer: 4
 --- !u!50 &5598491805160936547
 Rigidbody2D:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -135,8 +139,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: 2e3af67398484b9489117735aef35326, type: 2}
   m_IncludeLayers:
@@ -151,7 +155,7 @@ Rigidbody2D:
   m_Constraints: 4
 --- !u!95 &103752756455156656
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -165,11 +169,27 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4731845848353543071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7098533688387279882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5de48dbe177d737428f1485925a9f2b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  invulnerableDuration: 3
+  deathTimer: 2
+  hitFlashInterval: 0.25
 --- !u!114 &5643675069832440201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,7 +202,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c8f198ea8398042a8e8c9b37ce9f80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthValue: 0
   maxHealth: 6
   predatorLayers:
     serializedVersion: 2
@@ -195,6 +214,7 @@ CapsuleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7098533688387279882}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -218,7 +238,8 @@ CapsuleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0.09, y: -0.1}
   m_Size: {x: 0.5, y: 0.8}
   m_Direction: 0
@@ -271,6 +292,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

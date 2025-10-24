@@ -1,38 +1,87 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    CharacterStateManager characterStateManager;
+    EchoStateManager esm;
+    Health health;
+    SpriteRenderer sprite;
+    Animator anim;
 
     [Header("Read Input Parameters")]
-    [SerializeField] int index;
+    int index;
     bool isActive;
+    [SerializeField] float deathTimer;
 
-    // Start is called before the first frame update
-    void Start()
+    Func<EnemyController, bool> removeFromRecord;
+
+    void Awake()
     {
-        characterStateManager = GetComponent<CharacterStateManager>();
+        esm = GetComponent<EchoStateManager>();
+
+        health = GetComponent<Health>();
+        health.SetHitEvent(HitEvent);
+        health.SetDeathEvent(DeathEvent);
+
+        sprite = GetComponent<SpriteRenderer>();
+
+        anim = GetComponent<Animator>();
+
+        GlobalEventHolder.OnDeath += CheckPlayerDeath;
+    }
+    void OnDisable()
+    {
+        GlobalEventHolder.OnDeath -= CheckPlayerDeath;
     }
 
-    public void Initialize(InputData firstMove)
+    public void Initialize(InputData firstMove, Func<EnemyController, bool> removeFromRecord)
     {
         transform.position = firstMove.GetPosition();
         this.index = firstMove.GetIndex();
+        this.removeFromRecord = removeFromRecord;
     }
     void FixedUpdate()
     {
         if (isActive)
         {
             InputData nextMove = GlobalInputData.GetInstance().GetInput(index);
-            characterStateManager.HandleInputs(nextMove);
+            esm.HandleInputs(nextMove);
             index++;
         }
     }
     public void ActivateEnemy()
     {
         isActive = true;
-        characterStateManager.ActivateCharacter();
+        esm.Activate();
+    }
+    void HitEvent()
+    {
+        print("yeowch!!!");
+    }
+    public void CheckPlayerDeath(GameObject obj)
+    {
+        if (obj.CompareTag("Player") || obj.CompareTag("Player"))
+        {
+            DeathEvent();
+        }
+    }
+    public void TriggerDeath()
+    {
+        health.KillNoRegard();
+    }
+    void DeathEvent()
+    {
+        anim.SetTrigger("death");
+        esm.Deactivate();
+        GlobalEventHolder.OnDeath?.Invoke(gameObject);
+        StartCoroutine(DeathCoroutine());
+    }
+    IEnumerator DeathCoroutine()
+    {
+        yield return new WaitForSeconds(deathTimer);
+        removeFromRecord(this);
+        Destroy(gameObject);
     }
 }

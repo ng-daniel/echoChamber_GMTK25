@@ -6,7 +6,7 @@ public class EnemySpawnManager : MonoBehaviour
 {
 
     [SerializeField] GameObject enemyPrefab;
-    List<GameObject> enemyList = new List<GameObject>();
+    List<EnemyController> enemyList = new List<EnemyController>();
 
     [Header("Static Spawn Chain Params")]
     [SerializeField] bool staticSpawnRunning = false;
@@ -42,14 +42,11 @@ public class EnemySpawnManager : MonoBehaviour
     {
         GlobalEventHolder.OnInitialServerClear += InitializeSpawning;
         GlobalEventHolder.OnDeath += CheckPlayerDeadOnDeath;
-        GlobalEventHolder.OnDeath += CheckAndRemoveEnemyOnDeath;
-
     }
     void OnDestroy()
     {
         GlobalEventHolder.OnInitialServerClear -= InitializeSpawning;
         GlobalEventHolder.OnDeath -= CheckPlayerDeadOnDeath;
-        GlobalEventHolder.OnDeath -= CheckAndRemoveEnemyOnDeath;
     }
 
     void Update()
@@ -158,8 +155,8 @@ public class EnemySpawnManager : MonoBehaviour
 
         GameObject newEnemy = Instantiate(enemyPrefab, inputData.GetPosition(), Quaternion.identity);
         EnemyController enemyController = newEnemy.GetComponent<EnemyController>();
-        enemyController.Initialize(inputData);
-        enemyList.Add(newEnemy);
+        enemyController.Initialize(inputData, enemyList.Remove);
+        enemyList.Add(enemyController);
     }
     void CheckPlayerDeadOnDeath(GameObject victim)
     {
@@ -167,15 +164,15 @@ public class EnemySpawnManager : MonoBehaviour
         {
             StopAllCoroutines();
             active = false;
-            GibbAllEnemies();
+            // GibbAllEnemies();
         }
     }
     void GibbAllEnemies()
     {
         for (int i = 0; i < enemyList.Count; i++)
         {
-            GameObject victim = enemyList[i];
-            InstaGibb(victim);
+            EnemyController victim = enemyList[i];
+            if (victim != null) victim.TriggerDeath();
         }
     }
     void LimitEnemiesFunction()
@@ -183,19 +180,12 @@ public class EnemySpawnManager : MonoBehaviour
         while (enemyList.Count > maxEnemies)
         {
             print("Limiting Enemies!");
-            GameObject victim = enemyList[0];
-            enemyList.Remove(victim);
-            if (victim != null) InstaGibb(victim);
+            EnemyController victim = enemyList[0];
+            if (victim != null) victim.TriggerDeath();
         }
     }
-    void InstaGibb(GameObject victim)
-    {
-        if (victim == null) return;
-        victim.GetComponent<Health>().Damage(new DamageData(this.gameObject, 99999999)); // mods, ban this guy
-    }
-
-    public void CheckAndRemoveEnemyOnDeath(GameObject victim)
-    {
-        if (victim.GetComponent<EnemyController>() != null && enemyList.Contains(victim)) enemyList.Remove(victim);
-    }
+    // public void CheckAndRemoveEnemyOnDeath(GameObject victim)
+    // {
+    //     if (victim.GetComponent<EnemyController>() != null && enemyList.Contains(victim)) enemyList.Remove(victim);
+    // }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
 
-    [SerializeField] int healthValue;
+    [SerializeField] public int healthValue { get; private set; }
     [SerializeField] int maxHealth;
     [SerializeField] LayerMask predatorLayers;
     SpriteRenderer spriteRenderer;
@@ -17,14 +17,13 @@ public class Health : MonoBehaviour
     DeathEvent OnDeath;
     const float hitFlashInterval = 0.07f;
 
-    void Start()
+    void Awake()
     {
         healthValue = maxHealth;
         OnDeath ??= DefaultDeathEvent;
         OnHit ??= DefaultHitEvent;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-
     public void SetHealth(int val)
     {
         healthValue = val;
@@ -61,6 +60,11 @@ public class Health : MonoBehaviour
         {
             OnDeath();
         }
+    }
+    public void KillNoRegard()
+    {
+        // kills this entity no matter what
+        OnDeath();
     }
     DamageData DamageFilterChain(DamageData damageData)
     {
