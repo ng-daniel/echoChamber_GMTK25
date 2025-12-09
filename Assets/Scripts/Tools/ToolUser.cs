@@ -9,7 +9,7 @@ namespace Tools
     {
         ToolRegistry toolRegistry;
         [SerializeField] List<ToolInfo> toolInventory;
-        List<ITool> toolInstances;
+        [SerializeField] List<ITool> toolInstances;
         ITool currentTool;
         int currentToolIndex = 0;
         bool toolUserActive;
@@ -23,23 +23,28 @@ namespace Tools
         public void Activate()
         {
             toolUserActive = true;
+            if (currentTool != null)
+                currentTool.Equip();
+            else
+                SwapDirect(0);
         }
         public void DeActivate()
         {
             toolUserActive = false;
+            if (currentTool != null) currentTool.Unequip();
         }
         public void InitializeTools()
         {
             toolInstances = new List<ITool>();
             foreach (var toolInfo in toolInventory)
             {
+                print("Initializing tool: " + toolInfo.GetToolID());
                 GameObject toolPrefab = toolRegistry.GetToolPrefabByID(toolInfo.GetToolID());
                 GameObject toolObj = Instantiate(toolPrefab, transform);
                 ITool toolInstance = toolObj.GetComponent<ITool>();
                 toolInstances.Add(toolInstance);
-                toolObj.SetActive(false);
+                toolInstance.Unequip();
             }
-            SwapDirect(0);
         }
         public void SwapScrolling(int direction)
         {
@@ -49,7 +54,6 @@ namespace Tools
             if (currentTool != null)
             {
                 currentTool.Unequip();
-                (currentTool as MonoBehaviour).gameObject.SetActive(false);
             }
 
             // shift
@@ -59,7 +63,6 @@ namespace Tools
 
             // activate new tool
             currentTool = toolInstances[currentToolIndex];
-            (currentTool as MonoBehaviour).gameObject.SetActive(true);
             currentTool.Equip();
         }
 
@@ -72,7 +75,6 @@ namespace Tools
             if (currentTool != null)
             {
                 currentTool.Unequip();
-                (currentTool as MonoBehaviour).gameObject.SetActive(false);
             }
 
             // set new tool
@@ -80,7 +82,6 @@ namespace Tools
 
             // activate new tool
             currentTool = toolInstances[currentToolIndex];
-            (currentTool as MonoBehaviour).gameObject.SetActive(true);
             currentTool.Equip();
         }
 

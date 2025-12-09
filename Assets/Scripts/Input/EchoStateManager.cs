@@ -43,6 +43,7 @@ public class EchoStateManager : MonoBehaviour
         col = GetComponent<Collider2D>();
         characterSprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        toolUser = GetComponent<ToolUser>();
     }
     public void Activate()
     {
@@ -85,7 +86,7 @@ public class EchoStateManager : MonoBehaviour
         if (inputData.IsDashPress() && inputData.GetMoveDirection() != Vector2.zero) Dash(inputData.GetMoveDirection());
         if (isDashing) return true;
 
-        if (inputData.IsMouseHold()) toolUser.HandleInputs(inputData); // FireBullet(inputData.GetAimDirection());
+        toolUser.HandleInputs(inputData);
         SetShooting(inputData.IsMouseHold() && !isDashing);
 
         AimEcho(inputData.GetAimDirection()); // AimGun(inputData.GetAimDirection());

@@ -5,7 +5,6 @@ using Tools;
 public class WeaponBase : MonoBehaviour, ITool
 {
     bool isActive = false;
-    Vector2 direction;
     SpriteRenderer gunSprite;
     [SerializeField] GameObject bullet;
     DamageData bulletDamageData;
@@ -20,10 +19,12 @@ public class WeaponBase : MonoBehaviour, ITool
     {
         return ToolID.WEAPON_BASE;
     }
-    void Start()
+    void Awake()
     {
         gunSprite = GetComponent<SpriteRenderer>();
+        gunSprite.enabled = false;
         bulletDamageData = new(this.gameObject, bulletDamage);
+        print("DONE LOADING WEAPON BASE");
     }
 
     void Update()
@@ -43,12 +44,13 @@ public class WeaponBase : MonoBehaviour, ITool
         if (!isActive) return;
 
         Vector2 aimDirection = inputData.GetAimDirection();
+        ToolUtility.AimToolAutoApply(aimDirection, transform, gunSprite);
+        ToolUtility.SetDistFromBody(user.gameObject.transform, transform, aimDirection, gunDistanceFromBody);
+
         bool mouseHold = inputData.IsMouseHold();
         if (mouseHold && isActive && fireReady)
         {
-            ToolUtility.AimToolAutoApply(direction, transform, gunSprite);
-            ToolUtility.SetDistFromBody(user.gameObject.transform, transform, direction, gunDistanceFromBody);
-            FireBullet(direction);
+            FireBullet(aimDirection);
         }
     }
     void FireBullet(Vector2 direction)

@@ -104,4 +104,4 @@ MonoBehaviour:
   bulletSpeed: 15
   bulletDamage: 1
   fireIntervalSeconds: 0.25
-  gunDistanceFromBody: 0.5
+  gunDistanceFromBody: 0.6
