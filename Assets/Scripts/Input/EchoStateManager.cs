@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Tools;
 using UnityEngine;
 
 public class EchoStateManager : MonoBehaviour
@@ -29,16 +30,7 @@ public class EchoStateManager : MonoBehaviour
     Vector2 dashDirection;
 
     [Header("Shooting")]
-    [SerializeField] GameObject gun;
-    SpriteRenderer gunSprite;
-    [SerializeField] GameObject bullet;
-    DamageData bulletDamageData;
-    [SerializeField] float bulletSpeed;
-    [SerializeField] int bulletDamage;
-    [SerializeField] float fireIntervalSeconds;
-    [SerializeField] float gunDistanceFromBody;
-    float fireTimer = 0f;
-    bool fireReady = false;
+    ToolUser toolUser;
 
     [Header("Hurt Params")]
     [SerializeField] float invulnerableDuration;
@@ -49,18 +41,17 @@ public class EchoStateManager : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
-        gunSprite = gun.GetComponent<SpriteRenderer>();
         characterSprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-        bulletDamageData = new(this.gameObject, bulletDamage);
     }
     public void Activate()
     {
         acceptInputs = true;
-        gun.SetActive(true);
+        toolUser.Activate();
     }
     public void Deactivate()
     {
+        toolUser.DeActivate();
         AcceptInputs(false);
         SetDashing(false);
         rb.linearVelocity = Vector2.zero;
@@ -85,16 +76,6 @@ public class EchoStateManager : MonoBehaviour
                 SetDashReady(true);
             }
         }
-
-        if (!fireReady)
-        {
-            fireTimer += Time.deltaTime;
-            if (fireTimer > fireIntervalSeconds)
-            {
-                fireTimer = 0;
-                SetFireReady(true);
-            }
-        }
     }
 
     public bool HandleInputs(InputData inputData)
@@ -104,31 +85,19 @@ public class EchoStateManager : MonoBehaviour
         if (inputData.IsDashPress() && inputData.GetMoveDirection() != Vector2.zero) Dash(inputData.GetMoveDirection());
         if (isDashing) return true;
 
-        if (inputData.IsMouseHold() && fireReady) FireBullet(inputData.GetAimDirection());
+        if (inputData.IsMouseHold()) toolUser.HandleInputs(inputData); // FireBullet(inputData.GetAimDirection());
         SetShooting(inputData.IsMouseHold() && !isDashing);
 
-        AimGun(inputData.GetAimDirection());
+        AimEcho(inputData.GetAimDirection()); // AimGun(inputData.GetAimDirection());
         Move(inputData.GetMoveDirection());
         return true;
     }
 
-    void AimGun(Vector2 direction)
+    void AimEcho(Vector2 direction)
     {
-        // rotation
-        float angleDegRaw = Vector2.Angle(direction, Vector2.right);
-        float angleDeg = direction.y > 0 ? angleDegRaw : 180 + (180 - angleDegRaw);
-        gun.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angleDeg));
-
-        // translation
-        Vector3 positionFromPlayer = direction.normalized * gunDistanceFromBody;
-        gun.transform.position = transform.position + positionFromPlayer;
-
-        // flip character and gun graphics accordingly
-        bool shouldFlip = direction.x < 0;
-        gunSprite.flipY = shouldFlip;
-        characterSprite.flipX = shouldFlip;
-
+        characterSprite.flipX = direction.x < 0;
     }
+
     void Move(Vector2 direction)
     {
         bool movingValue = direction == Vector2.zero ? false : true;
@@ -144,15 +113,6 @@ public class EchoStateManager : MonoBehaviour
         SetDashing(true);
         SetDashReady(false);
     }
-    void FireBullet(Vector2 direction)
-    {
-        SetFireReady(false);
-
-        BulletFunctionality b = Instantiate(bullet, gun.transform.position, Quaternion.identity).GetComponent<BulletFunctionality>();
-        print(bulletDamageData.GetDamage());
-        b.Initialize(direction.normalized, gun.transform.rotation.eulerAngles.z, bulletSpeed, bulletDamageData);
-    }
-
     void SetMoving(bool val)
     {
         isMoving = val;
@@ -164,10 +124,6 @@ public class EchoStateManager : MonoBehaviour
     void SetShooting(bool val)
     {
         isShooting = val;
-    }
-    void SetFireReady(bool val)
-    {
-        fireReady = val;
     }
     void SetDashReady(bool val)
     {

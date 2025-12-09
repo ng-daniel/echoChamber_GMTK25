@@ -49,10 +49,6 @@ public class InputData
     {
         return aimDirection;
     }
-    public void SetAimDirection(Vector2 aimDirection)
-    {
-        this.aimDirection = aimDirection;
-    }
     public Vector2 GetPosition()
     {
         return position;
