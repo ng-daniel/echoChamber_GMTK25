@@ -14,16 +14,19 @@ public class WeaponBase : MonoBehaviour, ITool
     [SerializeField] float gunDistanceFromBody;
     float fireTimer = 0f;
     bool fireReady = false;
+    ToolUserConfig userConfig;
 
     public string GetToolID()
     {
         return ToolID.WEAPON_BASE;
     }
-    void Awake()
+    public void Initialize(GameObject toolUserObject, ToolUserConfig config)
     {
         gunSprite = GetComponent<SpriteRenderer>();
         gunSprite.enabled = false;
-        bulletDamageData = new(this.gameObject, bulletDamage);
+        bulletDamageData = new(toolUserObject, bulletDamage);
+
+        userConfig = config;
         print("DONE LOADING WEAPON BASE");
     }
 
@@ -59,7 +62,7 @@ public class WeaponBase : MonoBehaviour, ITool
 
         BulletFunctionality b = Instantiate(bullet, transform.position, Quaternion.identity).GetComponent<BulletFunctionality>();
         print(bulletDamageData.GetDamage());
-        b.Initialize(direction.normalized, transform.rotation.eulerAngles.z, bulletSpeed, bulletDamageData);
+        b.Initialize(direction.normalized, transform.rotation.eulerAngles.z, bulletSpeed, bulletDamageData, userConfig);
     }
     void SetFireReady(bool val)
     {

@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Tools
@@ -10,5 +11,6 @@ namespace Tools
         public void Equip();
         public void Unequip();
         public string GetToolID();
+        public void Initialize(GameObject toolUserObject, ToolUserConfig config);
     }
 }

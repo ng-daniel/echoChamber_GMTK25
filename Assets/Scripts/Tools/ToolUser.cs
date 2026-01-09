@@ -13,6 +13,7 @@ namespace Tools
         ITool currentTool;
         int currentToolIndex = 0;
         bool toolUserActive;
+        [SerializeField] ToolUserConfig config = null;
 
         void Start()
         {
@@ -39,9 +40,14 @@ namespace Tools
             foreach (var toolInfo in toolInventory)
             {
                 print("Initializing tool: " + toolInfo.GetToolID());
+
+                // first query for tool prefab and create instance
                 GameObject toolPrefab = toolRegistry.GetToolPrefabByID(toolInfo.GetToolID());
                 GameObject toolObj = Instantiate(toolPrefab, transform);
+
+                // initialize config and add to tool list
                 ITool toolInstance = toolObj.GetComponent<ITool>();
+                toolInstance.Initialize(this.transform.parent.gameObject, config);
                 toolInstances.Add(toolInstance);
                 toolInstance.Unequip();
             }

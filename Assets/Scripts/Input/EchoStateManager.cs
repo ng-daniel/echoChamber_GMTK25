@@ -43,7 +43,7 @@ public class EchoStateManager : MonoBehaviour
         col = GetComponent<Collider2D>();
         characterSprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-        toolUser = GetComponent<ToolUser>();
+        toolUser = GetComponentInChildren<ToolUser>();
     }
     public void Activate()
     {

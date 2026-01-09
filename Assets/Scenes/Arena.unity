@@ -403,7 +403,7 @@ PolygonCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 7991
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -886,8 +886,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ComponentVersion: 1
   m_AssetsPPU: 16
-  m_RefResolutionX: 320
-  m_RefResolutionY: 180
+  m_RefResolutionX: 640
+  m_RefResolutionY: 360
   m_CropFrame: 0
   m_GridSnapping: 2
   m_FilterMode: 0
@@ -957,7 +957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c55ad2a3a5d4c134e8173c6841c7166f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  proportionFromPlayer: 0.4
+  proportionFromPlayer: 0.25
 --- !u!4 &585899259
 Transform:
   m_ObjectHideFlags: 0
@@ -1334,7 +1334,7 @@ PolygonCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 7991
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1590,7 +1590,7 @@ PolygonCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 7991
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1692,7 +1692,7 @@ PolygonCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 7991
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -2370,7 +2370,7 @@ PolygonCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 7991
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -3508,9 +3508,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 254210391382964893, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 634328483919842050, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122407883517971059, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2455201805259489412, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2611923628573845359, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
       propertyPath: m_Name
       value: MachineBoss
+      objectReference: {fileID: 0}
+    - target: {fileID: 2611923628573845359, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4358290660646209517, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4480371186712523857, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5042608463485764308, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3555,6 +3583,22 @@ PrefabInstance:
     - target: {fileID: 5175290931913176906, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7453489433064611719, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657464348257755621, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8094083698198765479, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8998947958590966006, guid: addd9acd5d3b73b43bf3aaa3cfa036b9, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
