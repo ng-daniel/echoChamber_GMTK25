@@ -17,6 +17,7 @@ public class BulletFunctionality : MonoBehaviour
     Vector2 direction;
     float deathTimer = 5f;
     [SerializeField] GameObject particle;
+    VisualKitManager visKit;
 
     public void Initialize(Vector2 direction, float angle, float speed, DamageData damage, ToolUserConfig config = null)
     {
@@ -27,6 +28,12 @@ public class BulletFunctionality : MonoBehaviour
 
         this.damageData = damage;
         damageData.SetContext(damageDataContext);
+
+        visKit = GetComponentInChildren<VisualKitManager>();
+        if (visKit)
+        {
+            visKit.SelectKit(damage.GetAttacker().tag);
+        }
     }
 
     void Update()

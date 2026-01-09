@@ -15,6 +15,7 @@ public class WeaponBase : MonoBehaviour, ITool
     float fireTimer = 0f;
     bool fireReady = false;
     ToolUserConfig userConfig;
+    VisualKitManager visKit;
 
     public string GetToolID()
     {
@@ -22,11 +23,15 @@ public class WeaponBase : MonoBehaviour, ITool
     }
     public void Initialize(GameObject toolUserObject, ToolUserConfig config)
     {
-        gunSprite = GetComponent<SpriteRenderer>();
-        gunSprite.enabled = false;
         bulletDamageData = new(toolUserObject, bulletDamage);
 
         userConfig = config;
+
+        visKit = GetComponentInChildren<VisualKitManager>();
+        visKit.SelectKit(toolUserObject.tag);
+        gunSprite = visKit.GetCurrentKit().GetComponent<SpriteRenderer>();
+        gunSprite.enabled = false;
+
         print("DONE LOADING WEAPON BASE");
     }
 
