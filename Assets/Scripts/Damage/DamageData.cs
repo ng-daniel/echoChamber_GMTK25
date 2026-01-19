@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class DamageData
 {
-
     GameObject attacker;
     int layer;
     int damageVal;
@@ -14,9 +13,7 @@ public class DamageData
 
     public DamageData(DamageData data)
     {
-        attacker = data.attacker;
-        layer = data.attacker.layer;
-
+        SetAttacker(data.attacker);
         damageVal = data.damageVal;
         multiplier = data.multiplier;
         context = data.context;
@@ -24,15 +21,21 @@ public class DamageData
 
     public DamageData(GameObject attacker, int damageVal)
     {
-        this.attacker = attacker;
+        SetAttacker(attacker);
         this.damageVal = damageVal;
     }
 
     public DamageData(GameObject attacker, int damageVal, string context)
     {
-        this.attacker = attacker;
+        SetAttacker(attacker);
         this.damageVal = damageVal;
         this.context = context;
+    }
+
+    void SetAttacker(GameObject attacker)
+    {
+        this.attacker = attacker;
+        layer = attacker.layer;
     }
 
     public bool AttackerInLayer(LayerMask targetLayer)

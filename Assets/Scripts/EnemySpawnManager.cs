@@ -29,8 +29,8 @@ public class EnemySpawnManager : MonoBehaviour
 
     [Header("Enemy Limit Params")]
     [SerializeField] int maxEnemies;
-    [SerializeField] float limitCheckInterval;
-    float limitCheckTimer;
+    // [SerializeField] float limitCheckInterval;
+    // float limitCheckTimer;
 
 
     [Header("Testing")]
@@ -54,7 +54,7 @@ public class EnemySpawnManager : MonoBehaviour
         if (runStatic) StaticSpawnChain();
         else if (runDynamic) DynamicSpawnChain();
 
-        if (active)
+        if (active && !(enemyList.Count > maxEnemies))
         {
             spawnTimer += Time.deltaTime;
             if (spawnTimer > spawnInterval)
@@ -70,13 +70,6 @@ public class EnemySpawnManager : MonoBehaviour
                 }
                 useDynamic = !useDynamic;
                 spawnTimer = 0;
-            }
-
-            limitCheckTimer += Time.deltaTime;
-            if (limitCheckTimer > limitCheckInterval)
-            {
-                LimitEnemiesFunction();
-                limitCheckTimer = 0;
             }
         }
     }

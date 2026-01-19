@@ -957,7 +957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c55ad2a3a5d4c134e8173c6841c7166f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  proportionFromPlayer: 0.25
+  proportionFromPlayer: 0.1
 --- !u!4 &585899259
 Transform:
   m_ObjectHideFlags: 0
@@ -3364,7 +3364,6 @@ MonoBehaviour:
   dynamicSpawnAmount: 6
   spawnInterval: 18
   maxEnemies: 20
-  limitCheckInterval: 0.25
   runStatic: 0
   runDynamic: 0
 --- !u!4 &2066229508

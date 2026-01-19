@@ -18,7 +18,7 @@ public class WeaponBase : MonoBehaviour, ITool
     {
         return ToolID.WEAPON_BASE;
     }
-    public void Initialize(GameObject toolUserObject, ToolUserConfig config, ScriptableObject statsObj)
+    public void Initialize(GameObject sourceObj, ToolUserConfig config, ScriptableObject statsObj)
     {
         if (statsObj is WeaponBaseStats)
         {
@@ -29,12 +29,12 @@ public class WeaponBase : MonoBehaviour, ITool
             throw new Exception("WeaponBase -> Initialize: incorrect stats object!");
         }
 
-        bulletDamageData = new(toolUserObject, stats.bulletDamage);
+        bulletDamageData = new(sourceObj, stats.bulletDamage);
 
         userConfig = config;
 
         visKit = GetComponentInChildren<VisualKitManager>();
-        visKit.SelectKit(toolUserObject.tag);
+        visKit.SelectKit(sourceObj.tag);
         gunSprite = visKit.GetCurrentKit().GetComponent<SpriteRenderer>();
         gunSprite.enabled = false;
     }
