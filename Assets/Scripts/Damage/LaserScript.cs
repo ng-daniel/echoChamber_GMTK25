@@ -128,6 +128,8 @@ public class LaserScript : MonoBehaviour
 
         ToggleLaserRenderer(LASER_OFF);
         rotateAttackRunning = false;
+
+        Destroy(gameObject);
     }
 
     Vector2 GetLaserDistance(Vector2 aimDirection)

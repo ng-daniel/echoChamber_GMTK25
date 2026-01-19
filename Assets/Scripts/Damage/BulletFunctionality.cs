@@ -8,15 +8,14 @@ public class BulletFunctionality : MonoBehaviour
 {
 
     Rigidbody2D rb;
-
     float speed;
-    int damage;
     DamageData damageData;
     [SerializeField] string damageDataContext;
     Vector2 direction;
     float deathTimer = 5f;
     [SerializeField] GameObject particle;
     VisualKitManager visKit;
+    LayerMask optionalCollisionIgnores = 0;
 
     public void Initialize(Vector2 direction, float angle, float speed, DamageData damage, ToolUserConfig config = null)
     {
@@ -33,6 +32,11 @@ public class BulletFunctionality : MonoBehaviour
         {
             visKit.SelectKit(damage.GetAttacker().tag);
         }
+    }
+
+    public void OptionalCollisionIgnores(LayerMask layers)
+    {
+        this.optionalCollisionIgnores = layers;
     }
 
     void Update()
@@ -63,6 +67,9 @@ public class BulletFunctionality : MonoBehaviour
         if (target == damageData.GetAttacker())
             return false;
         if (target.layer == damageData.GetAttackerLayer())
+            return false;
+        if (optionalCollisionIgnores != 0 &&
+            (((1 << target.layer) & optionalCollisionIgnores.value) != 0)) // is there a layermask override - if so does it apply to the current target?
             return false;
 
         Health hp = target.GetComponent<Health>();

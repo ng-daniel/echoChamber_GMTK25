@@ -10,4 +10,5 @@ public class WeaponBaseStats : ScriptableObject
     [SerializeField] public int bulletDamage;
     [SerializeField] public float fireIntervalSeconds;
     [SerializeField] public float gunDistanceFromBody;
+    [SerializeField] public LayerMask collisionOverrides = 0;
 }

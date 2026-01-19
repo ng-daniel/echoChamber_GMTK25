@@ -30,7 +30,6 @@ public class WeaponBase : MonoBehaviour, ITool
         }
 
         bulletDamageData = new(sourceObj, stats.bulletDamage);
-
         userConfig = config;
 
         visKit = GetComponentInChildren<VisualKitManager>();
@@ -70,8 +69,8 @@ public class WeaponBase : MonoBehaviour, ITool
         SetFireReady(false);
 
         BulletFunctionality b = Instantiate(bullet, transform.position, Quaternion.identity).GetComponent<BulletFunctionality>();
-        print(bulletDamageData.GetDamage());
         b.Initialize(direction.normalized, transform.rotation.eulerAngles.z, stats.bulletSpeed, bulletDamageData, userConfig);
+        b.OptionalCollisionIgnores(stats.collisionOverrides);
     }
     void SetFireReady(bool val)
     {
