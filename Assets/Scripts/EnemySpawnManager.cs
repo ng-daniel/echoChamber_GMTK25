@@ -60,15 +60,15 @@ public class EnemySpawnManager : MonoBehaviour
             if (spawnTimer > spawnInterval)
             {
                 DynamicSpawnChain();
-                // if (useDynamic)
-                // {
-                //     DynamicSpawnChain();
-                // }
-                // else
-                // {
-                //     StaticSpawnChain();
-                // }
-                // useDynamic = !useDynamic;
+                if (useDynamic)
+                {
+                    DynamicSpawnChain();
+                }
+                else
+                {
+                    StaticSpawnChain();
+                }
+                useDynamic = !useDynamic;
                 spawnTimer = 0;
             }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Tools;
 using UnityEngine;
 
 public class BulletFunctionality : MonoBehaviour
@@ -9,29 +10,35 @@ public class BulletFunctionality : MonoBehaviour
     Rigidbody2D rb;
 
     float speed;
-    [SerializeField] float rotationSpeed;
     int damage;
     DamageData damageData;
     [SerializeField] string damageDataContext;
     Vector2 direction;
     float deathTimer = 5f;
     [SerializeField] GameObject particle;
+    VisualKitManager visKit;
 
-    public void Initialize(Vector2 direction, float angle, float speed, DamageData damage)
+    public void Initialize(Vector2 direction, float angle, float speed, DamageData damage, ToolUserConfig config = null)
     {
         rb = GetComponent<Rigidbody2D>();
+        this.rb.rotation = angle;
         this.direction = direction;
+        this.speed = speed;
+
         this.damageData = damage;
         damageData.SetContext(damageDataContext);
-        this.speed = speed;
-        this.rb.rotation = angle;
+
+        visKit = GetComponentInChildren<VisualKitManager>();
+        if (visKit)
+        {
+            visKit.SelectKit(damage.GetAttacker().tag);
+        }
     }
 
     void Update()
     {
         rb.linearVelocity = direction.normalized * speed;
 
-        rb.rotation += rotationSpeed * Time.deltaTime;
         rb.rotation = rb.rotation >= 360 ? 0 : rb.rotation;
         rb.rotation = rb.rotation < 0 ? 360 : rb.rotation;
 
@@ -53,11 +60,15 @@ public class BulletFunctionality : MonoBehaviour
     }
     bool TryHitTarget(GameObject target)
     {
-        if (target == damageData.GetAttacker()) return false;
+        if (target == damageData.GetAttacker())
+            return false;
+        if (target.layer == damageData.GetAttackerLayer())
+            return false;
+
         Health hp = target.GetComponent<Health>();
-        if (hp == null) return true;
-        print(damageData.GetDamage());
-        hp.Damage(new(damageData));
+        if (hp != null)
+            hp.Damage(new(damageData));
+
         return true;
     }
     void FizzleOut()
