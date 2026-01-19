@@ -11,6 +11,6 @@ namespace Tools
         public void Equip();
         public void Unequip();
         public string GetToolID();
-        public void Initialize(GameObject toolUserObject, ToolUserConfig config);
+        public void Initialize(GameObject toolUserObject, ToolUserConfig config, ScriptableObject stats);
     }
 }

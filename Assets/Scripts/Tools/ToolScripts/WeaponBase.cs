@@ -8,10 +8,7 @@ public class WeaponBase : MonoBehaviour, ITool
     SpriteRenderer gunSprite;
     [SerializeField] GameObject bullet;
     DamageData bulletDamageData;
-    [SerializeField] float bulletSpeed;
-    [SerializeField] int bulletDamage;
-    [SerializeField] float fireIntervalSeconds;
-    [SerializeField] float gunDistanceFromBody;
+    WeaponBaseStats stats;
     float fireTimer = 0f;
     bool fireReady = false;
     ToolUserConfig userConfig;
@@ -21,9 +18,18 @@ public class WeaponBase : MonoBehaviour, ITool
     {
         return ToolID.WEAPON_BASE;
     }
-    public void Initialize(GameObject toolUserObject, ToolUserConfig config)
+    public void Initialize(GameObject toolUserObject, ToolUserConfig config, ScriptableObject statsObj)
     {
-        bulletDamageData = new(toolUserObject, bulletDamage);
+        if (statsObj is WeaponBaseStats)
+        {
+            this.stats = statsObj as WeaponBaseStats;
+        }
+        else
+        {
+            throw new Exception("WeaponBase -> Initialize: incorrect stats object!");
+        }
+
+        bulletDamageData = new(toolUserObject, stats.bulletDamage);
 
         userConfig = config;
 
@@ -31,8 +37,6 @@ public class WeaponBase : MonoBehaviour, ITool
         visKit.SelectKit(toolUserObject.tag);
         gunSprite = visKit.GetCurrentKit().GetComponent<SpriteRenderer>();
         gunSprite.enabled = false;
-
-        print("DONE LOADING WEAPON BASE");
     }
 
     void Update()
@@ -40,7 +44,7 @@ public class WeaponBase : MonoBehaviour, ITool
         if (!fireReady)
         {
             fireTimer += Time.deltaTime;
-            if (fireTimer > fireIntervalSeconds)
+            if (fireTimer > stats.fireIntervalSeconds)
             {
                 fireTimer = 0;
                 SetFireReady(true);
@@ -53,7 +57,7 @@ public class WeaponBase : MonoBehaviour, ITool
 
         Vector2 aimDirection = inputData.GetAimDirection();
         ToolUtility.AimToolAutoApply(aimDirection, transform, gunSprite);
-        ToolUtility.SetDistFromBody(user.gameObject.transform, transform, aimDirection, gunDistanceFromBody);
+        ToolUtility.SetDistFromBody(user.gameObject.transform, transform, aimDirection, stats.gunDistanceFromBody);
 
         bool mouseHold = inputData.IsMouseHold();
         if (mouseHold && isActive && fireReady)
@@ -67,7 +71,7 @@ public class WeaponBase : MonoBehaviour, ITool
 
         BulletFunctionality b = Instantiate(bullet, transform.position, Quaternion.identity).GetComponent<BulletFunctionality>();
         print(bulletDamageData.GetDamage());
-        b.Initialize(direction.normalized, transform.rotation.eulerAngles.z, bulletSpeed, bulletDamageData, userConfig);
+        b.Initialize(direction.normalized, transform.rotation.eulerAngles.z, stats.bulletSpeed, bulletDamageData, userConfig);
     }
     void SetFireReady(bool val)
     {

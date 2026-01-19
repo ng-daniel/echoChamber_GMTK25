@@ -7,6 +7,7 @@ namespace Tools
     [Serializable]
     public class ToolUser : MonoBehaviour
     {
+        GameObject parent;
         ToolRegistry toolRegistry;
         [SerializeField] List<ToolInfo> toolInventory;
         [SerializeField] List<ITool> toolInstances;
@@ -17,6 +18,7 @@ namespace Tools
 
         void Start()
         {
+            parent = this.transform.parent.gameObject;
             toolRegistry = FindFirstObjectByType<ToolRegistry>();
             toolUserActive = false;
             InitializeTools();
@@ -39,15 +41,15 @@ namespace Tools
             toolInstances = new List<ITool>();
             foreach (var toolInfo in toolInventory)
             {
-                print("Initializing tool: " + toolInfo.GetToolID());
+                // print("Initializing tool: " + toolInfo.GetToolID());
 
                 // first query for tool prefab and create instance
-                GameObject toolPrefab = toolRegistry.GetToolPrefabByID(toolInfo.GetToolID());
-                GameObject toolObj = Instantiate(toolPrefab, transform);
+                ToolQueryResult result = toolRegistry.GetToolByID(toolInfo.GetToolID(), parent.tag);
+                GameObject toolObj = Instantiate(result.prefab, transform);
 
-                // initialize config and add to tool list
+                // initialize with config, stats, and add to tool list
                 ITool toolInstance = toolObj.GetComponent<ITool>();
-                toolInstance.Initialize(this.transform.parent.gameObject, config);
+                toolInstance.Initialize(parent, config, result.stats);
                 toolInstances.Add(toolInstance);
                 toolInstance.Unequip();
             }

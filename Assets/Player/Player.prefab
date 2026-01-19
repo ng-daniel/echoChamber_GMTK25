@@ -46,7 +46,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolInventory:
   - toolID: WEAPON_BASE
+    toolStat: {fileID: 11400000, guid: 98648563ab097de4badd3207bf4081f4, type: 2}
     isUnlocked: 0
+  config: {fileID: 0}
 --- !u!1 &7098533688387279882
 GameObject:
   m_ObjectHideFlags: 0

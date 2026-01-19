@@ -7,6 +7,7 @@ public class DamageData
 {
 
     GameObject attacker;
+    int layer;
     int damageVal;
     int multiplier = 1;
     String context;
@@ -14,6 +15,8 @@ public class DamageData
     public DamageData(DamageData data)
     {
         attacker = data.attacker;
+        layer = data.attacker.layer;
+
         damageVal = data.damageVal;
         multiplier = data.multiplier;
         context = data.context;
@@ -44,6 +47,10 @@ public class DamageData
     public GameObject GetAttacker()
     {
         return attacker;
+    }
+    public int GetAttackerLayer()
+    {
+        return layer;
     }
     public int GetDamage()
     {

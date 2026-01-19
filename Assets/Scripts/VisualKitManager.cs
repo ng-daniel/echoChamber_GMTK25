@@ -37,7 +37,7 @@ public class VisualKitManager : MonoBehaviour
         bool selected = false;
         foreach (VisualKit kit in visualKits)
         {
-            if (kit.tag == tag)
+            if (kit.tag.Equals(tag))
             {
                 if (selected == true)
                 {
@@ -53,7 +53,11 @@ public class VisualKitManager : MonoBehaviour
                 kit.visObj.SetActive(false);
             }
         }
-        Debug.LogError("VisualKitManager -> SelectKit: No kit found for the given tag");
+
+        if (!selected)
+        {
+            Debug.LogError("VisualKitManager -> SelectKit: No kit found for the given tag");
+        }
     }
 
     public GameObject GetCurrentKit()

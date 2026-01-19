@@ -2791,6 +2791,11 @@ MonoBehaviour:
   toolEntries:
   - toolID: 
     toolPrefab: {fileID: 3801972890083381321, guid: 2e4352864b7c4264ebff788aadbaae61, type: 3}
+    kits:
+    - tag: Player
+      stats: {fileID: 11400000, guid: 98648563ab097de4badd3207bf4081f4, type: 2}
+    - tag: Echo
+      stats: {fileID: 11400000, guid: aae30db808fed2c45b4ff03a324a8034, type: 2}
 --- !u!1 &1820503478
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,6 @@ public class BulletFunctionality : MonoBehaviour
     Rigidbody2D rb;
 
     float speed;
-    [SerializeField] float rotationSpeed;
     int damage;
     DamageData damageData;
     [SerializeField] string damageDataContext;
@@ -40,7 +39,6 @@ public class BulletFunctionality : MonoBehaviour
     {
         rb.linearVelocity = direction.normalized * speed;
 
-        rb.rotation += rotationSpeed * Time.deltaTime;
         rb.rotation = rb.rotation >= 360 ? 0 : rb.rotation;
         rb.rotation = rb.rotation < 0 ? 360 : rb.rotation;
 
@@ -64,7 +62,7 @@ public class BulletFunctionality : MonoBehaviour
     {
         if (target == damageData.GetAttacker())
             return false;
-        if (target.layer == damageData.GetAttacker().layer)
+        if (target.layer == damageData.GetAttackerLayer())
             return false;
 
         Health hp = target.GetComponent<Health>();

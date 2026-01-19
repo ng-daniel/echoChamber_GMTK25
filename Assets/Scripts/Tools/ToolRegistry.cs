@@ -4,15 +4,42 @@ using UnityEngine;
 
 namespace Tools
 {
+    public struct ToolQueryResult
+    {
+        public ToolQueryResult(GameObject prefab, ScriptableObject stats)
+        {
+            this.prefab = prefab;
+            this.stats = stats;
+        }
+        public GameObject prefab;
+        public ScriptableObject stats;
+    }
     public class ToolRegistry : MonoBehaviour
     {
+        [Serializable]
+        public class ToolStatKit
+        {
+            public string tag;
+            public ScriptableObject stats;
+        }
         [Serializable]
         public class ToolEntry
         {
             public string toolID;
             public GameObject toolPrefab;
+            public List<ToolStatKit> kits;
+            public ScriptableObject GetKitForTag(string tag)
+            {
+                foreach (ToolStatKit kit in kits)
+                {
+                    if (kit.tag.Equals(tag))
+                    {
+                        return kit.stats;
+                    }
+                }
+                return null;
+            }
         }
-
         public List<ToolEntry> toolEntries;
         bool initialized = false;
 
@@ -29,8 +56,7 @@ namespace Tools
             }
             initialized = true;
         }
-
-        public GameObject GetToolPrefabByID(string toolID)
+        public ToolQueryResult GetToolByID(string toolID, string tag)
         {
             if (!initialized) Initialize();
 
@@ -38,11 +64,12 @@ namespace Tools
             {
                 if (entry.toolID == toolID)
                 {
-                    return entry.toolPrefab;
+                    ScriptableObject targetKit = entry.GetKitForTag(tag);
+                    return new ToolQueryResult(entry.toolPrefab, targetKit);
                 }
             }
             Debug.LogError($"ToolRegistry: Tool with ID {toolID} not found.");
-            return null;
+            return new ToolQueryResult(null, null);
         }
 
         public string GetToolIDByPrefab(GameObject toolPrefab)
