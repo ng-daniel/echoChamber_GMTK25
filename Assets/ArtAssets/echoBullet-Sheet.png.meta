@@ -1,7 +1,19 @@
 fileFormatVersion: 2
-guid: c1a69382c33bfe345bc8716c59e114f5
+guid: 322d059f3c03c4046af4ec88f464f3db
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -3116998942591137711
+    second: echoBullet-Sheet_0
+  - first:
+      213: 4323151600129004175
+    second: echoBullet-Sheet_1
+  - first:
+      213: 2861961126341147412
+    second: echoBullet-Sheet_2
+  - first:
+      213: -1751903597895495788
+    second: echoBullet-Sheet_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -123,7 +135,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: player_0
+      name: echoBullet-Sheet_0
       rect:
         serializedVersion: 2
         x: 0
@@ -131,59 +143,81 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 012bf261f6f83e84ba518bfe1d26ab8c
-      internalID: -905274007
+      spriteID: 158469de9f13eb4d0800000000000000
+      internalID: -3116998942591137711
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_1
+      name: echoBullet-Sheet_1
       rect:
         serializedVersion: 2
         x: 16
-        y: 5
-        width: 8
-        height: 5
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: c39667eb4b25a09489c6dd66ada31799
-      internalID: -1881785318
+      spriteID: f82d9dba97beefb30800000000000000
+      internalID: 4323151600129004175
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_2
+      name: echoBullet-Sheet_2
       rect:
         serializedVersion: 2
-        x: 35
-        y: 3
-        width: 10
-        height: 10
+        x: 32
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: c2fd67a2194cd6c49a16b8a4a9f9f7ea
-      internalID: -654341382
+      spriteID: 41b7a882b7ab7b720800000000000000
+      internalID: 2861961126341147412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: echoBullet-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49fc5bea5fcffa7e0800000000000000
+      internalID: -1751903597895495788
       vertices: []
       indices: 
       edges: []
@@ -192,7 +226,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: c3f78d9f2ccd0c345a7af61413eb8ff6
     internalID: 0
     vertices: []
     indices: 
@@ -202,9 +236,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      player_0: -905274007
-      player_1: -1881785318
-      player_2: -654341382
+      echoBullet-Sheet_0: -3116998942591137711
+      echoBullet-Sheet_1: 4323151600129004175
+      echoBullet-Sheet_2: 2861961126341147412
+      echoBullet-Sheet_3: -1751903597895495788
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

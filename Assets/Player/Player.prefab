@@ -46,8 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolInventory:
   - toolID: WEAPON_BASE
-    toolStat: {fileID: 11400000, guid: 98648563ab097de4badd3207bf4081f4, type: 2}
-    isUnlocked: 0
   config: {fileID: 0}
 --- !u!1 &7098533688387279882
 GameObject:
@@ -132,7 +130,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 106101816, guid: 55613687db00f404a846dbaf44822568, type: 3}
+  m_Sprite: {fileID: -2445342018519941446, guid: 261a6e6717d92d54cb640018e9b3c301, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
