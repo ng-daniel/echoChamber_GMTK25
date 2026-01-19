@@ -16,3 +16,6 @@ MonoBehaviour:
   bulletDamage: 1
   fireIntervalSeconds: 0.25
   gunDistanceFromBody: 0.5
+  collisionOverrides:
+    serializedVersion: 2
+    m_Bits: 0
