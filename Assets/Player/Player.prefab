@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolInventory:
   - toolID: WEAPON_BASE
+  - toolID: WEAPON_RAILGUN
   config: {fileID: 0}
 --- !u!1 &7098533688387279882
 GameObject:
