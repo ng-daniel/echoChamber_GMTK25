@@ -32,6 +32,10 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(InvulnerableCoroutine());
     }
+    public bool HandleInputs(InputData inputData)
+    {
+        return esm.HandleInputs(inputData);
+    }
     IEnumerator InvulnerableCoroutine()
     {
         invulnerable = true;

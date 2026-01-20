@@ -833,9 +833,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: 0.001211387
     y: 0
-    width: 1
+    width: 0.9981829
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -2480,6 +2480,14 @@ PrefabInstance:
     - target: {fileID: 3248473797419820474, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5388543699523512754, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
+      propertyPath: toolInventory.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5388543699523512754, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
+      propertyPath: toolInventory.Array.data[1].toolID
+      value: WEAPON_RAILGUN
       objectReference: {fileID: 0}
     - target: {fileID: 5643675069832440201, guid: d6fd6d638cc6191429bfa8307b56b17a, type: 3}
       propertyPath: predatorLayers.m_Bits

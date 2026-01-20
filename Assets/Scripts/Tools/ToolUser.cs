@@ -97,6 +97,12 @@ namespace Tools
         {
             if (toolUserActive && currentTool != null)
                 currentTool.HandleInputs(inputData, this);
+
+            int hotswapIdx = inputData.GetHotSwapIdx();
+            if (hotswapIdx >= 0)
+            {
+                SwapDirect(hotswapIdx);
+            }
         }
     }
 }
