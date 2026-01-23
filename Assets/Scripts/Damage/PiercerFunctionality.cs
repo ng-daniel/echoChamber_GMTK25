@@ -28,6 +28,8 @@ public class PiercerFunctionality : MonoBehaviour
         if (visKit)
         {
             VisualKit v = visKit.SelectKit(damage.GetAttacker().tag);
+            chargeVisualObj = v.GetSubObjectByID("ChargingVisual");
+            visualProjectile = v.GetSubObjectByID("ProjectileVisual");
         }
     }
     public void OptionalCollisionIgnores(LayerMask layers)
@@ -45,7 +47,9 @@ public class PiercerFunctionality : MonoBehaviour
     public void SetModeFire(Vector2 direction)
     {
         gameObject.transform.parent = null;
-        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, colliderRadius, direction, MAX_LENGTH);
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, direction, MAX_LENGTH, LayerMask.GetMask("Pit"));
+        float dist = ((Vector2)(hitInfo.collider.gameObject.transform.position - this.gameObject.transform.position)).magnitude; // distance between raycast hit and current pos
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, colliderRadius, direction, dist);
         foreach (RaycastHit2D hit in hits)
         {
             if (hit.collider.gameObject.tag == this.gameObject.tag)
@@ -57,7 +61,9 @@ public class PiercerFunctionality : MonoBehaviour
         if (visKit)
         {
             chargeVisualObj.SetActive(false);
-            Instantiate(visualProjectile, transform.position, Quaternion.LookRotation(Vector3.forward, direction));
+            PiercerProjectileVisual pVis = Instantiate(visualProjectile, transform.position, Quaternion.LookRotation(Vector3.forward, direction)).GetComponent<PiercerProjectileVisual>();
+            pVis.Initialize(direction, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg, 50f);
+            pVis.OptionalCollisionIgnores(optionalCollisionIgnores);
         }
         firedOff = true;
     }

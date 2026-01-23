@@ -50,6 +50,7 @@ public class WeaponRailgun : MonoBehaviour, ITool
         chargeTimer = stats.chargeTime;
         piercerInstance = Instantiate(piercerPrefab, this.gameObject.transform).GetComponent<PiercerFunctionality>();
         piercerInstance.Initialize(inputAimDir, laserDamageData, stats.railRadius);
+        piercerInstance.OptionalCollisionIgnores(stats.collisionOverrides);
         currentState = RailgunState.CHARGING;
     }
     void FireShot()

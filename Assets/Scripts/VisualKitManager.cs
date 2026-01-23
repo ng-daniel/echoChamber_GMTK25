@@ -12,6 +12,7 @@ namespace VisualKits
         [SerializeField] public string id;
         [SerializeField] public GameObject obj;
     }
+
     [Serializable]
     public struct VisualKit
     {
@@ -24,6 +25,19 @@ namespace VisualKits
             this.tag = tag;
             this.visObj = visObj;
             this.subObjects = subObjects;
+        }
+
+        public GameObject GetSubObjectByID(string id)
+        {
+            foreach (VisKitSubObject subObj in subObjects)
+            {
+                if (subObj.id == id)
+                {
+                    return subObj.obj;
+                }
+            }
+            Debug.LogError("VisualKit -> GetSubObjectByID: No sub-object found for the given ID");
+            return null;
         }
     }
 

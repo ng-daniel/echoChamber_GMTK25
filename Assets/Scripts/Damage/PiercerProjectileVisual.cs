@@ -3,14 +3,14 @@ using UnityEngine;
 public class PiercerProjectileVisual : MonoBehaviour
 {
     Rigidbody2D rb;
-    float speed;
+    [SerializeField] float speed;
     Vector2 direction;
     float deathTimer = 5f;
     [SerializeField] GameObject particle;
     LayerMask optionalCollisionIgnores = 0;
     public void Initialize(Vector2 direction, float angle, float speed)
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = this.gameObject.GetComponent<Rigidbody2D>();
         this.rb.rotation = angle;
         this.direction = direction;
         this.speed = speed;
@@ -28,6 +28,13 @@ public class PiercerProjectileVisual : MonoBehaviour
 
         deathTimer -= Time.deltaTime;
         if (deathTimer < 0)
+        {
+            FizzleOut();
+        }
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (((1 << collision.gameObject.layer) & LayerMask.GetMask("Pit")) != 0)
         {
             FizzleOut();
         }
