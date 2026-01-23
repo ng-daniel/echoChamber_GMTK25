@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 
 using Tools;
+using VisualKits;
+
 public class WeaponBase : MonoBehaviour, ITool
 {
     bool isActive = false;
@@ -34,7 +36,7 @@ public class WeaponBase : MonoBehaviour, ITool
 
         visKit = GetComponentInChildren<VisualKitManager>();
         visKit.SelectKit(sourceObj.tag);
-        gunSprite = visKit.GetCurrentKit().GetComponent<SpriteRenderer>();
+        gunSprite = visKit.GetCurrentKit().visObj.GetComponent<SpriteRenderer>();
         gunSprite.enabled = false;
     }
 

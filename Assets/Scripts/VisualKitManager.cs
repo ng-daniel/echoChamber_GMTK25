@@ -4,64 +4,86 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.VisualScripting;
 
-public class VisualKitManager : MonoBehaviour
+namespace VisualKits
 {
+    public struct VisKitSubObject
+    {
+        [SerializeField] public string id;
+        [SerializeField] public GameObject obj;
+    }
     [Serializable]
     public struct VisualKit
     {
         [SerializeField] public string tag;
         [SerializeField] public GameObject visObj;
-    }
-    [SerializeField] List<VisualKit> visualKits;
-    GameObject currentVisual = null;
+        [SerializeField] public List<VisKitSubObject> subObjects;
 
-    void Awake()
-    {
-        if (visualKits.Count > 0) currentVisual = visualKits[0].visObj;
-    }
-
-    public GameObject GetKit(string tag)
-    {
-        foreach (VisualKit kit in visualKits)
+        public VisualKit(string tag, GameObject visObj, List<VisKitSubObject> subObjects)
         {
-            if (kit.tag == tag)
-            {
-                return kit.visObj;
-            }
+            this.tag = tag;
+            this.visObj = visObj;
+            this.subObjects = subObjects;
         }
-        Debug.LogError("VisualKitManager -> GetKit: No kit found for the given tag");
-        return null;
     }
-    public void SelectKit(string tag)
+
+    public class VisualKitManager : MonoBehaviour
     {
-        bool selected = false;
-        foreach (VisualKit kit in visualKits)
+
+        [SerializeField] List<VisualKit> visualKits;
+        VisualKit currentVisual;
+
+        void Awake()
         {
-            if (kit.tag.Equals(tag))
+            if (visualKits.Count > 0) currentVisual = visualKits[0];
+        }
+
+        public VisualKit GetKit(string tag)
+        {
+            foreach (VisualKit kit in visualKits)
             {
-                if (selected == true)
+                if (kit.tag == tag)
                 {
-                    Debug.LogError("VisualKitManager -> SelectKit: Selected kit twice, indicates possible duplicate tag IDs");
+                    return kit;
                 }
-
-                kit.visObj.SetActive(true);
-                currentVisual = kit.visObj;
-                selected = true;
             }
-            else
-            {
-                kit.visObj.SetActive(false);
-            }
+            Debug.LogError("VisualKitManager -> GetKit: No kit found for the given tag");
+            return new("ERROR", null, null);
         }
-
-        if (!selected)
+        public VisualKit SelectKit(string tag)
         {
-            Debug.LogError("VisualKitManager -> SelectKit: No kit found for the given tag");
-        }
-    }
+            bool selected = false;
+            VisualKit selectedKit = new();
+            foreach (VisualKit kit in visualKits)
+            {
+                if (kit.tag.Equals(tag))
+                {
+                    if (selected == true)
+                    {
+                        Debug.LogError("VisualKitManager -> SelectKit: Selected kit twice, indicates possible duplicate tag IDs");
+                    }
 
-    public GameObject GetCurrentKit()
-    {
-        return currentVisual;
+                    kit.visObj.SetActive(true);
+                    currentVisual = kit;
+                    selectedKit = kit;
+                    selected = true;
+                }
+                else
+                {
+                    kit.visObj.SetActive(false);
+                }
+            }
+
+            if (selected)
+            {
+                return selectedKit;
+            }
+            Debug.LogError("VisualKitManager -> SelectKit: No kit found for the given tag");
+            return new("ERROR", null, null);
+        }
+
+        public VisualKit GetCurrentKit()
+        {
+            return currentVisual;
+        }
     }
 }

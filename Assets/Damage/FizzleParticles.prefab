@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2308277768375184977}
   - component: {fileID: 7251858367914895239}
   m_Layer: 0
-  m_Name: Bullet Fizzle Particles
+  m_Name: FizzleParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

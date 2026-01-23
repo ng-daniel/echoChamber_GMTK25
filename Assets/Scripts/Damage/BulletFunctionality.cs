@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using Tools;
 using UnityEngine;
+
+using Tools;
+using VisualKits;
 
 public class BulletFunctionality : MonoBehaviour
 {
@@ -80,7 +82,6 @@ public class BulletFunctionality : MonoBehaviour
     }
     void FizzleOut()
     {
-        print("HIT SOMETHING");
         Instantiate(particle, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }

@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 
 using Tools;
+using VisualKits;
+
 public class WeaponRailgun : MonoBehaviour, ITool
 {
     public enum RailgunState
@@ -14,7 +16,7 @@ public class WeaponRailgun : MonoBehaviour, ITool
 
     bool isActive = false;
     SpriteRenderer gunSprite;
-    [SerializeField] GameObject bullet;
+    [SerializeField] GameObject piercer;
     DamageData laserDamageData;
     WeaponRailgunStats stats;
     ToolUserConfig userConfig;
@@ -97,7 +99,7 @@ public class WeaponRailgun : MonoBehaviour, ITool
 
         visKit = GetComponentInChildren<VisualKitManager>();
         visKit.SelectKit(sourceObj.tag);
-        gunSprite = visKit.GetCurrentKit().GetComponent<SpriteRenderer>();
+        gunSprite = visKit.GetCurrentKit().visObj.GetComponent<SpriteRenderer>();
         gunSprite.enabled = false;
     }
     public void Equip()
