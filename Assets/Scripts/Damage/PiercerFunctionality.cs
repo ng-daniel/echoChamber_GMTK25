@@ -7,17 +7,18 @@ public class PiercerFunctionality : MonoBehaviour
 {
     const int MAX_LENGTH = 100;
     DamageData damageData;
+    bool firedOff = false;
     Collider2D piercerCollider;
     VisualKitManager visKit;
     [SerializeField] float laserTrailLingerTime;
     GameObject piercerVisualTelegraph;
     GameObject piercerVisualFire;
-    [SerializeField] GameObject particle;
-    [SerializeField] LayerMask optionalCollisionIgnores = 0;
+    LayerMask optionalCollisionIgnores = 0;
 
     public void Initialize(DamageData damage)
     {
         this.damageData = damage;
+
         visKit = GetComponentInChildren<VisualKitManager>();
         if (visKit)
         {
@@ -46,6 +47,18 @@ public class PiercerFunctionality : MonoBehaviour
         {
             piercerVisualTelegraph.SetActive(false);
             piercerVisualFire.SetActive(true);
+        }
+        firedOff = true;
+    }
+    void Update()
+    {
+        if (firedOff)
+        {
+            laserTrailLingerTime -= Time.deltaTime;
+            if (laserTrailLingerTime <= 0f)
+            {
+                SetModeOff();
+            }
         }
     }
     public void SetModeOff()

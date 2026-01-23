@@ -13,10 +13,10 @@ public class WeaponRailgun : MonoBehaviour, ITool
         COOLDOWN
     }
     RailgunState currentState = RailgunState.READY;
-
     bool isActive = false;
     SpriteRenderer gunSprite;
-    [SerializeField] GameObject piercer;
+    [SerializeField] GameObject piercerPrefab;
+    PiercerFunctionality piercerInstance;
     DamageData laserDamageData;
     WeaponRailgunStats stats;
     ToolUserConfig userConfig;
@@ -47,12 +47,15 @@ public class WeaponRailgun : MonoBehaviour, ITool
     void StartCharge()
     {
         chargeTimer = stats.chargeTime;
+        piercerInstance = Instantiate(piercerPrefab, transform).GetComponent<PiercerFunctionality>();
+        piercerInstance.Initialize(laserDamageData);
         currentState = RailgunState.CHARGING;
     }
     void FireShot()
     {
         // fire shot logic
-        print("POW!");
+        if (piercerInstance != null)
+            piercerInstance.SetModeFire();
 
         cooldownTimer = stats.fireCooldownSec;
         currentState = RailgunState.COOLDOWN;
@@ -82,7 +85,6 @@ public class WeaponRailgun : MonoBehaviour, ITool
             }
         }
     }
-
     public void Initialize(GameObject sourceObj, ToolUserConfig config, ScriptableObject statsObj)
     {
         if (statsObj is WeaponRailgunStats)
@@ -111,9 +113,9 @@ public class WeaponRailgun : MonoBehaviour, ITool
     {
         if (currentState == RailgunState.CHARGING)
         {
+            piercerInstance.SetModeOff();
             currentState = RailgunState.READY;
         }
-
         isActive = false;
         gunSprite.enabled = false;
     }
