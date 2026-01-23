@@ -8,6 +8,7 @@ public class WeaponRailgunStats : ScriptableObject
 {
     [SerializeField] public float chargeTime;
     [SerializeField] public int railDamage;
+    [SerializeField] public float railRadius;
     [SerializeField] public float fireCooldownSec;
     [SerializeField] public float gunDistanceFromBody;
     [SerializeField] public LayerMask collisionOverrides = 0;

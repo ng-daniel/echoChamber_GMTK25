@@ -6,18 +6,23 @@ using VisualKits;
 public class PiercerFunctionality : MonoBehaviour
 {
     const int MAX_LENGTH = 100;
+
+    Vector2 direction;
     DamageData damageData;
+    float colliderRadius;
+
+
     bool firedOff = false;
-    Collider2D piercerCollider;
     VisualKitManager visKit;
-    [SerializeField] float laserTrailLingerTime;
-    GameObject piercerVisualTelegraph;
-    GameObject piercerVisualFire;
+    GameObject chargeVisualObj;
+    GameObject visualProjectile;
     LayerMask optionalCollisionIgnores = 0;
 
-    public void Initialize(DamageData damage)
+    public void Initialize(Vector2 direction, DamageData damage, float radius)
     {
+        this.direction = direction;
         this.damageData = damage;
+        this.colliderRadius = radius;
 
         visKit = GetComponentInChildren<VisualKitManager>();
         if (visKit)
@@ -32,21 +37,27 @@ public class PiercerFunctionality : MonoBehaviour
 
     public void SetModeTelegraph()
     {
-        piercerCollider.enabled = false;
         if (visKit)
         {
-            piercerVisualTelegraph.SetActive(true);
-            piercerVisualFire.SetActive(false);
+            chargeVisualObj.SetActive(true);
         }
     }
-    public void SetModeFire()
+    public void SetModeFire(Vector2 direction)
     {
         gameObject.transform.parent = null;
-        piercerCollider.enabled = true;
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, colliderRadius, direction, MAX_LENGTH);
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit.collider.gameObject.tag == this.gameObject.tag)
+            {
+                return;
+            }
+            TryHitTarget(hit.collider.gameObject);
+        }
         if (visKit)
         {
-            piercerVisualTelegraph.SetActive(false);
-            piercerVisualFire.SetActive(true);
+            chargeVisualObj.SetActive(false);
+            Instantiate(visualProjectile, transform.position, Quaternion.LookRotation(Vector3.forward, direction));
         }
         firedOff = true;
     }
@@ -54,20 +65,19 @@ public class PiercerFunctionality : MonoBehaviour
     {
         if (firedOff)
         {
-            laserTrailLingerTime -= Time.deltaTime;
-            if (laserTrailLingerTime <= 0f)
-            {
-                SetModeOff();
-            }
+            // laserTrailLingerTime -= Time.deltaTime;
+            // if (laserTrailLingerTime <= 0f)
+            // {
+            //     SetModeOff();
+            // }
+            SetModeOff();
         }
     }
     public void SetModeOff()
     {
-        piercerCollider.enabled = false;
         if (visKit)
         {
-            piercerVisualTelegraph.SetActive(false);
-            piercerVisualFire.SetActive(false);
+            chargeVisualObj.SetActive(false);
         }
         Destroy(this.gameObject);
     }

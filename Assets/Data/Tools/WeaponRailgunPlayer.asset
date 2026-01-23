@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chargeTime: 0.5
   railDamage: 1
-  fireCooldownSec: 3
+  railRadius: 0.25
+  fireCooldownSec: 2
   gunDistanceFromBody: 0.5
   collisionOverrides:
     serializedVersion: 2

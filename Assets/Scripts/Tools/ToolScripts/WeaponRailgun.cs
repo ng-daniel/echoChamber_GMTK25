@@ -21,7 +21,7 @@ public class WeaponRailgun : MonoBehaviour, ITool
     WeaponRailgunStats stats;
     ToolUserConfig userConfig;
     VisualKitManager visKit;
-
+    Vector2 inputAimDir;
     float chargeTimer = 0f;
     float cooldownTimer = 0f;
 
@@ -37,6 +37,7 @@ public class WeaponRailgun : MonoBehaviour, ITool
         Vector2 aimDirection = inputData.GetAimDirection();
         ToolUtility.AimToolAutoApply(aimDirection, transform, gunSprite);
         ToolUtility.SetDistFromBody(toolUser.gameObject.transform, transform, aimDirection, stats.gunDistanceFromBody);
+        inputAimDir = aimDirection;
 
         bool mouseClick = inputData.IsMouseClick();
         if (mouseClick && isActive && currentState == RailgunState.READY)
@@ -47,15 +48,19 @@ public class WeaponRailgun : MonoBehaviour, ITool
     void StartCharge()
     {
         chargeTimer = stats.chargeTime;
-        piercerInstance = Instantiate(piercerPrefab, transform).GetComponent<PiercerFunctionality>();
-        piercerInstance.Initialize(laserDamageData);
+        piercerInstance = Instantiate(piercerPrefab, this.gameObject.transform).GetComponent<PiercerFunctionality>();
+        piercerInstance.Initialize(inputAimDir, laserDamageData, stats.railRadius);
         currentState = RailgunState.CHARGING;
     }
     void FireShot()
     {
         // fire shot logic
         if (piercerInstance != null)
-            piercerInstance.SetModeFire();
+        {
+            print("MYINST: " + piercerInstance);
+            piercerInstance.SetModeFire(inputAimDir);
+        }
+
 
         cooldownTimer = stats.fireCooldownSec;
         currentState = RailgunState.COOLDOWN;
@@ -100,7 +105,9 @@ public class WeaponRailgun : MonoBehaviour, ITool
         userConfig = config;
 
         visKit = GetComponentInChildren<VisualKitManager>();
-        visKit.SelectKit(sourceObj.tag);
+        VisualKit myKit = visKit.SelectKit(sourceObj.tag);
+
+
         gunSprite = visKit.GetCurrentKit().visObj.GetComponent<SpriteRenderer>();
         gunSprite.enabled = false;
     }
