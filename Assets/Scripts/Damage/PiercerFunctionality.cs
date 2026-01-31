@@ -11,7 +11,7 @@ public class PiercerFunctionality : MonoBehaviour
     [SerializeField] float speed;
     DamageData damageData;
     Vector2 direction;
-    float deathTimer = 1f;
+    float deathTimer = 5f;
     [SerializeField] GameObject particle;
     LayerMask optionalCollisionIgnores = 0;
     VisualKitManager visKit;
@@ -67,36 +67,50 @@ public class PiercerFunctionality : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == this.gameObject.tag)
-        {
-            return;
-        }
-        bool hitResult = TryHitTarget(collision.gameObject);
-        if (hitResult) FizzleOut();
+        // if (collision.gameObject.tag == this.gameObject.tag)
+        // {
+        //     return;
+        // }
+        // bool hitResult = TryHitTarget(collision.gameObject);
+        // if (hitResult) FizzleOut();
 
-        if (((1 << collision.gameObject.layer) & LayerMask.GetMask("Pit")) != 0)
+        if (((1 << collision.gameObject.layer) & LayerMask.GetMask("Wall")) != 0)
         {
-            FizzleOut();
+            PreFizzle();
         }
     }
     public void ActivateDamageRaycast(Vector2 direction)
     {
         gameObject.transform.parent = null;
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, direction, MAX_LENGTH, LayerMask.GetMask("Pit"));
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, direction, MAX_LENGTH, LayerMask.GetMask("Wall"));
+        float dist = CalculateDistance();
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, railgunStats.railRadius, direction, dist);
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (this.gameObject.name.Equals(hit.collider.gameObject.name))
+            {
+                continue;
+            }
+            bool result = TryHitTarget(hit.collider.gameObject);
+            print("AHHHH: " + hit.collider.gameObject.name + " -> " + result);
+        }
+    }
+
+    float CalculateDistance()
+    {
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, direction, MAX_LENGTH, LayerMask.GetMask("Wall"));
         float dist = MAX_LENGTH;
         if (hitInfo.collider != null)
         {
             dist = ((Vector2)(hitInfo.collider.gameObject.transform.position - this.gameObject.transform.position)).magnitude; // distance between raycast hit and current pos
         }
-        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, railgunStats.railRadius, direction, dist);
-        foreach (RaycastHit2D hit in hits)
-        {
-            if (this.gameObject.CompareTag(hit.collider.gameObject.tag))
-            {
-                return;
-            }
-            TryHitTarget(hit.collider.gameObject);
-        }
+        return dist;
+    }
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, direction.normalized * CalculateDistance());
     }
 
     bool TryHitTarget(GameObject target)
@@ -114,6 +128,10 @@ public class PiercerFunctionality : MonoBehaviour
             hp.Damage(new(damageData));
 
         return true;
+    }
+    void PreFizzle()
+    {
+        rb.linearVelocity = Vector2.zero;
     }
     void FizzleOut()
     {
