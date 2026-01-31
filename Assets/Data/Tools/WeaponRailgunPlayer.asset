@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cccd4f1101f59d14fba46da252c65a2e, type: 3}
   m_Name: WeaponRailgunPlayer
   m_EditorClassIdentifier: 
-  chargeTime: 0.5
-  railDamage: 1
-  railRadius: 0.25
-  fireCooldownSec: 2
+  chargeTime: 0.25
+  railDamage: 2
+  railRadius: 0.4
+  fireCooldownSec: 0.75
   gunDistanceFromBody: 0.5
   collisionOverrides:
     serializedVersion: 2

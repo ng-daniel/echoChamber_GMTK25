@@ -99,7 +99,7 @@ namespace Tools
                 currentTool.HandleInputs(inputData, this);
 
             int hotswapIdx = inputData.GetHotSwapIdx();
-            if (hotswapIdx >= 0)
+            if (hotswapIdx >= 0 && hotswapIdx != currentToolIndex)
             {
                 SwapDirect(hotswapIdx);
             }

@@ -12,6 +12,7 @@ public class PlayerInputHandler : MonoBehaviour
     InputAction moveAction;
     InputAction dashAction;
     InputAction hotswapAction;
+    int mostRecentHotswap = 0;
     InputData currentInput;
     Vector2 mouseWorldLocation;
 
@@ -52,8 +53,12 @@ public class PlayerInputHandler : MonoBehaviour
         if (hotswapAction.triggered)
         {
             float rawValue = hotswapAction.ReadValue<float>();
-            hotswapIdx = (int)rawValue - 1; // since raw input is read as 1-9, adjust for indexing by subtracting 1
+            hotswapIdx = (int)rawValue - 1; // since raw input is read as 1-10, adjust for indexing by subtracting 1 to make it 0-9 (not pressing anything gives -1)
             print("TRIGGERED: " + hotswapIdx);
+        }
+        if (hotswapIdx != -1 && hotswapIdx != mostRecentHotswap)
+        {
+            mostRecentHotswap = hotswapIdx;
         }
 
         InputData data = new(
@@ -63,7 +68,7 @@ public class PlayerInputHandler : MonoBehaviour
             dashPress,
             mouseHold,
             mouseClick,
-            hotswapIdx
+            mostRecentHotswap
         );
         return data;
     }

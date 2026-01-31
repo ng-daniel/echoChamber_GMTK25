@@ -42,7 +42,7 @@ public class EnemyController : MonoBehaviour
         this.index = firstMove.GetIndex();
         this.removeFromRecord = removeFromRecord;
     }
-    void FixedUpdate()
+    void Update()
     {
         if (isActive)
         {

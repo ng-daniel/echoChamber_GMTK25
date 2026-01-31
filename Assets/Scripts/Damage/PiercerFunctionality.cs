@@ -6,18 +6,21 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class PiercerFunctionality : MonoBehaviour
 {
-    const int MAX_LENGTH = 100;
+    const int MAX_LENGTH = 500;
     Rigidbody2D rb;
     [SerializeField] float speed;
     DamageData damageData;
     Vector2 direction;
     float deathTimer = 5f;
     [SerializeField] GameObject particle;
+    [SerializeField] LayerMask rayStoppingLayers;
     LayerMask optionalCollisionIgnores = 0;
     VisualKitManager visKit;
     WeaponRailgunStats railgunStats;
     float trailtimer = 0.005f;
     TrailRenderer mytrail;
+    Vector2 startingPosition;
+    bool initialized = false;
     public void Initialize(
         Vector2 direction,
         float angle,
@@ -25,6 +28,8 @@ public class PiercerFunctionality : MonoBehaviour
         DamageData damage,
         ToolUserConfig config = null)
     {
+        startingPosition = this.gameObject.transform.position;
+
         rb = this.gameObject.GetComponent<Rigidbody2D>();
         this.rb.rotation = angle;
         this.direction = direction;
@@ -37,6 +42,7 @@ public class PiercerFunctionality : MonoBehaviour
         mytrail = myKit.visObj.GetComponent<TrailRenderer>();
         mytrail.enabled = false;
 
+        initialized = true;
         ActivateDamageRaycast(direction);
     }
     public void OptionalCollisionIgnores(LayerMask layers)
@@ -49,10 +55,10 @@ public class PiercerFunctionality : MonoBehaviour
         {
             trailtimer -= Time.deltaTime;
         }
-        else if (mytrail.enabled == false)
-        {
-            mytrail.enabled = true;
-        }
+        // else if (mytrail.enabled == false)
+        // {
+        //     mytrail.enabled = true;
+        // }
 
         rb.linearVelocity = direction.normalized * speed;
 
@@ -67,24 +73,16 @@ public class PiercerFunctionality : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // if (collision.gameObject.tag == this.gameObject.tag)
-        // {
-        //     return;
-        // }
-        // bool hitResult = TryHitTarget(collision.gameObject);
-        // if (hitResult) FizzleOut();
-
-        if (((1 << collision.gameObject.layer) & LayerMask.GetMask("Wall")) != 0)
+        if ((rayStoppingLayers & (1 << collision.gameObject.layer)) != 0)
         {
             PreFizzle();
         }
     }
     public void ActivateDamageRaycast(Vector2 direction)
     {
-        gameObject.transform.parent = null;
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, direction, MAX_LENGTH, LayerMask.GetMask("Wall"));
+        // RaycastHit2D hitInfo = Physics2D.Raycast(startingPosition, direction, MAX_LENGTH, LayerMask.GetMask("Wall"));
         float dist = CalculateDistance();
-        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, railgunStats.railRadius, direction, dist);
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(startingPosition, railgunStats.railRadius, direction, dist);
         foreach (RaycastHit2D hit in hits)
         {
             if (this.gameObject.name.Equals(hit.collider.gameObject.name))
@@ -98,19 +96,21 @@ public class PiercerFunctionality : MonoBehaviour
 
     float CalculateDistance()
     {
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, direction, MAX_LENGTH, LayerMask.GetMask("Wall"));
+        RaycastHit2D hitInfo = Physics2D.Raycast(startingPosition, direction, MAX_LENGTH, LayerMask.GetMask("Wall"));
         float dist = MAX_LENGTH;
         if (hitInfo.collider != null)
         {
-            dist = ((Vector2)(hitInfo.collider.gameObject.transform.position - this.gameObject.transform.position)).magnitude; // distance between raycast hit and current pos
+            dist = (hitInfo.point - startingPosition).magnitude; // distance between raycast hit and current pos
         }
         return dist;
     }
 
     public void OnDrawGizmos()
     {
+        float dist = CalculateDistance();
         Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, direction.normalized * CalculateDistance());
+        Gizmos.DrawRay(startingPosition, direction.normalized * dist);
+        Gizmos.DrawSphere(startingPosition + (direction.normalized * dist), railgunStats.railRadius);
     }
 
     bool TryHitTarget(GameObject target)

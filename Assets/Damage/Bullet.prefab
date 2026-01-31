@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1474794781135914731
 Transform:
   m_ObjectHideFlags: 0
@@ -4961,8 +4961,10 @@ MonoBehaviour:
   visualKits:
   - tag: Player
     visObj: {fileID: 2441957943565232028}
+    subObjects: []
   - tag: Echo
     visObj: {fileID: 105382289065220045}
+    subObjects: []
 --- !u!1 &2441957943565232028
 GameObject:
   m_ObjectHideFlags: 0
@@ -4981,7 +4983,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8268532165773414780
 Transform:
   m_ObjectHideFlags: 0
