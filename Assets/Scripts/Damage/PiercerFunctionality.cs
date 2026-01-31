@@ -1,91 +1,69 @@
 using UnityEngine;
 
+using Tools;
 using VisualKits;
-
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class PiercerFunctionality : MonoBehaviour
 {
     const int MAX_LENGTH = 100;
-
-    Vector2 direction;
+    Rigidbody2D rb;
+    [SerializeField] float speed;
     DamageData damageData;
-    float colliderRadius;
-
-
-    bool firedOff = false;
-    VisualKitManager visKit;
-    GameObject chargeVisualObj;
-    GameObject visualProjectile;
+    Vector2 direction;
+    float deathTimer = 1f;
+    [SerializeField] GameObject particle;
     LayerMask optionalCollisionIgnores = 0;
-
-    public void Initialize(Vector2 direction, DamageData damage, float radius)
+    VisualKitManager visKit;
+    WeaponRailgunStats railgunStats;
+    float trailtimer = 0.005f;
+    TrailRenderer mytrail;
+    public void Initialize(
+        Vector2 direction,
+        float angle,
+        WeaponRailgunStats stats,
+        DamageData damage,
+        ToolUserConfig config = null)
     {
+        rb = this.gameObject.GetComponent<Rigidbody2D>();
+        this.rb.rotation = angle;
         this.direction = direction;
         this.damageData = damage;
-        this.colliderRadius = radius;
 
         visKit = GetComponentInChildren<VisualKitManager>();
-        if (visKit)
-        {
-            VisualKit v = visKit.SelectKit(damage.GetAttacker().tag);
-            chargeVisualObj = v.GetSubObjectByID("ChargingVisual");
-            visualProjectile = v.GetSubObjectByID("ProjectileVisual");
-        }
+        VisualKit myKit = visKit.SelectKit(damage.GetAttacker().tag);
+        railgunStats = stats;
+
+        mytrail = myKit.visObj.GetComponent<TrailRenderer>();
+        mytrail.enabled = false;
+
+        ActivateDamageRaycast(direction);
     }
     public void OptionalCollisionIgnores(LayerMask layers)
     {
         this.optionalCollisionIgnores = layers;
     }
-
-    public void SetModeTelegraph()
-    {
-        if (visKit)
-        {
-            chargeVisualObj.SetActive(true);
-        }
-    }
-    public void SetModeFire(Vector2 direction)
-    {
-        gameObject.transform.parent = null;
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, direction, MAX_LENGTH, LayerMask.GetMask("Pit"));
-        float dist = ((Vector2)(hitInfo.collider.gameObject.transform.position - this.gameObject.transform.position)).magnitude; // distance between raycast hit and current pos
-        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, colliderRadius, direction, dist);
-        foreach (RaycastHit2D hit in hits)
-        {
-            if (hit.collider.gameObject.tag == this.gameObject.tag)
-            {
-                return;
-            }
-            TryHitTarget(hit.collider.gameObject);
-        }
-        if (visKit)
-        {
-            chargeVisualObj.SetActive(false);
-            PiercerProjectileVisual pVis = Instantiate(visualProjectile, transform.position, Quaternion.LookRotation(Vector3.forward, direction)).GetComponent<PiercerProjectileVisual>();
-            pVis.Initialize(direction, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg, 50f);
-            pVis.OptionalCollisionIgnores(optionalCollisionIgnores);
-        }
-        firedOff = true;
-    }
     void Update()
     {
-        if (firedOff)
+        if (trailtimer > 0)
         {
-            // laserTrailLingerTime -= Time.deltaTime;
-            // if (laserTrailLingerTime <= 0f)
-            // {
-            //     SetModeOff();
-            // }
-            SetModeOff();
+            trailtimer -= Time.deltaTime;
         }
-    }
-    public void SetModeOff()
-    {
-        if (visKit)
+        else if (mytrail.enabled == false)
         {
-            chargeVisualObj.SetActive(false);
+            mytrail.enabled = true;
         }
-        Destroy(this.gameObject);
+
+        rb.linearVelocity = direction.normalized * speed;
+
+        rb.rotation = rb.rotation >= 360 ? 0 : rb.rotation;
+        rb.rotation = rb.rotation < 0 ? 360 : rb.rotation;
+
+        deathTimer -= Time.deltaTime;
+        if (deathTimer < 0)
+        {
+            FizzleOut();
+        }
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -93,8 +71,34 @@ public class PiercerFunctionality : MonoBehaviour
         {
             return;
         }
-        TryHitTarget(collision.gameObject);
+        bool hitResult = TryHitTarget(collision.gameObject);
+        if (hitResult) FizzleOut();
+
+        if (((1 << collision.gameObject.layer) & LayerMask.GetMask("Pit")) != 0)
+        {
+            FizzleOut();
+        }
     }
+    public void ActivateDamageRaycast(Vector2 direction)
+    {
+        gameObject.transform.parent = null;
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, direction, MAX_LENGTH, LayerMask.GetMask("Pit"));
+        float dist = MAX_LENGTH;
+        if (hitInfo.collider != null)
+        {
+            dist = ((Vector2)(hitInfo.collider.gameObject.transform.position - this.gameObject.transform.position)).magnitude; // distance between raycast hit and current pos
+        }
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, railgunStats.railRadius, direction, dist);
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (this.gameObject.CompareTag(hit.collider.gameObject.tag))
+            {
+                return;
+            }
+            TryHitTarget(hit.collider.gameObject);
+        }
+    }
+
     bool TryHitTarget(GameObject target)
     {
         if (target == damageData.GetAttacker())
@@ -110,5 +114,10 @@ public class PiercerFunctionality : MonoBehaviour
             hp.Damage(new(damageData));
 
         return true;
+    }
+    void FizzleOut()
+    {
+        Instantiate(particle, transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
     }
 }

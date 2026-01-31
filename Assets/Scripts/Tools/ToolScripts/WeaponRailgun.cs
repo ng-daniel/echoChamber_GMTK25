@@ -12,18 +12,19 @@ public class WeaponRailgun : MonoBehaviour, ITool
         CHARGING,
         COOLDOWN
     }
-    RailgunState currentState = RailgunState.READY;
+    [SerializeField] RailgunState currentState = RailgunState.READY;
     bool isActive = false;
     SpriteRenderer gunSprite;
     [SerializeField] GameObject piercerPrefab;
-    PiercerFunctionality piercerInstance;
-    DamageData laserDamageData;
+    [SerializeField] GameObject chargeEffect;
+    [SerializeField] ParticleSystem cooldownEffect;
+    DamageData railDamageData;
     WeaponRailgunStats stats;
     ToolUserConfig userConfig;
     VisualKitManager visKit;
-    Vector2 inputAimDir;
     float chargeTimer = 0f;
     float cooldownTimer = 0f;
+    bool fireFlag;
 
     public string GetToolID()
     {
@@ -35,42 +36,52 @@ public class WeaponRailgun : MonoBehaviour, ITool
         if (!isActive) return;
 
         Vector2 aimDirection = inputData.GetAimDirection();
+        if (aimDirection == null)
+        {
+            print("WeaponRailgun -> HandleInputs: aimDirection is null!");
+        }
         ToolUtility.AimToolAutoApply(aimDirection, transform, gunSprite);
         ToolUtility.SetDistFromBody(toolUser.gameObject.transform, transform, aimDirection, stats.gunDistanceFromBody);
-        inputAimDir = aimDirection;
 
         bool mouseClick = inputData.IsMouseClick();
         if (mouseClick && isActive && currentState == RailgunState.READY)
         {
             StartCharge();
         }
+        if (GetFireFlag())
+        {
+            ResetFireFlag();
+            FireShot(aimDirection);
+        }
     }
     void StartCharge()
     {
         chargeTimer = stats.chargeTime;
-        piercerInstance = Instantiate(piercerPrefab, this.gameObject.transform).GetComponent<PiercerFunctionality>();
-        piercerInstance.Initialize(inputAimDir, laserDamageData, stats.railRadius);
-        piercerInstance.OptionalCollisionIgnores(stats.collisionOverrides);
+        chargeEffect.SetActive(true);
         currentState = RailgunState.CHARGING;
+        print("RAIL CHARGE STARTED");
     }
-    void FireShot()
+    void FireShot(Vector2 direction)
     {
-        // fire shot logic
-        if (piercerInstance != null)
-        {
-            print("MYINST: " + piercerInstance);
-            piercerInstance.SetModeFire(inputAimDir);
-        }
-
-
+        chargeEffect.SetActive(false);
+        PiercerFunctionality piercerInstance = Instantiate(piercerPrefab, transform.position, Quaternion.identity).GetComponent<PiercerFunctionality>();
+        piercerInstance.Initialize(
+            direction,
+            transform.rotation.eulerAngles.z,
+            stats,
+            railDamageData,
+            userConfig);
         cooldownTimer = stats.fireCooldownSec;
         currentState = RailgunState.COOLDOWN;
+        cooldownEffect.Play();
     }
     void Reset()
     {
         chargeTimer = 0f;
         cooldownTimer = 0f;
         currentState = RailgunState.READY;
+        cooldownEffect.Stop();
+        chargeEffect.SetActive(false);
     }
     void Update()
     {
@@ -79,7 +90,7 @@ public class WeaponRailgun : MonoBehaviour, ITool
             chargeTimer -= Time.deltaTime;
             if (chargeTimer <= 0)
             {
-                FireShot();
+                SetFireFlag();
             }
         }
         if (currentState == RailgunState.COOLDOWN)
@@ -102,26 +113,44 @@ public class WeaponRailgun : MonoBehaviour, ITool
             throw new Exception("WeaponRailgun -> Initialize: incorrect stats object!");
         }
 
-        laserDamageData = new(sourceObj, stats.railDamage);
+        railDamageData = new(sourceObj, stats.railDamage);
         userConfig = config;
 
         visKit = GetComponentInChildren<VisualKitManager>();
         VisualKit myKit = visKit.SelectKit(sourceObj.tag);
 
-
         gunSprite = visKit.GetCurrentKit().visObj.GetComponent<SpriteRenderer>();
         gunSprite.enabled = false;
+
+        cooldownEffect.Stop();
+    }
+    void SetFireFlag()
+    {
+        fireFlag = true;
+    }
+    void ResetFireFlag()
+    {
+        fireFlag = false;
+    }
+    bool GetFireFlag()
+    {
+        return fireFlag;
     }
     public void Equip()
     {
         isActive = true;
         gunSprite.enabled = true;
+        if (currentState == RailgunState.COOLDOWN)
+        {
+            cooldownEffect.Play();
+        }
     }
     public void Unequip()
     {
+        chargeEffect.SetActive(false);
+        cooldownEffect.Stop();
         if (currentState == RailgunState.CHARGING)
         {
-            piercerInstance.SetModeOff();
             currentState = RailgunState.READY;
         }
         isActive = false;
