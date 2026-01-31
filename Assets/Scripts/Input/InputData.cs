@@ -68,6 +68,10 @@ public class InputData
     {
         return mouseClick;
     }
+    public void SetMouseClick(bool val) // used mainly just for the player input handler buffer
+    {
+        mouseClick = val;
+    }
     public int GetHotSwapIdx()
     {
         return hotswapValue;

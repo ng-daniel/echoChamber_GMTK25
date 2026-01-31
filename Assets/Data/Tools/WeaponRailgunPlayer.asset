@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WeaponRailgunPlayer
   m_EditorClassIdentifier: 
   chargeTime: 0.25
-  railDamage: 2
+  railDamage: 1
   railRadius: 0.4
   fireCooldownSec: 0.75
   gunDistanceFromBody: 0.5

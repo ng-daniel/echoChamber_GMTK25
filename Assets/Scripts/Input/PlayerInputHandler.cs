@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,9 +13,12 @@ public class PlayerInputHandler : MonoBehaviour
     InputAction moveAction;
     InputAction dashAction;
     InputAction hotswapAction;
-    int mostRecentHotswap = 0;
     InputData currentInput;
     Vector2 mouseWorldLocation;
+
+    // buffer vars
+    int mostRecentHotswap = 0;
+    bool recentMouseClick = false;
 
 
     void Awake()
@@ -29,11 +33,33 @@ public class PlayerInputHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // buffer mouse clicks
+        Tuple<bool, bool> mouseInputs = ReadMouseInputs();
+        bool mouseHold = mouseInputs.Item1;
+        bool mouseClick = mouseInputs.Item2;
+
+        if (mouseClick && !recentMouseClick)
+        {
+            recentMouseClick = true;
+        }
+    }
+    void FixedUpdate()
+    {
         if (player != null)
         {
             currentInput = GenerateCurrentPlayerInput();
+            currentInput.SetMouseClick(recentMouseClick);
+            recentMouseClick = false;
             TrySendPlayerCharacterInputs(currentInput);
         }
+    }
+
+    Tuple<bool, bool> ReadMouseInputs()
+    {
+        return new Tuple<bool, bool>(
+            Mouse.current.leftButton.isPressed,
+            Mouse.current.leftButton.wasPressedThisFrame
+        );
     }
 
     InputData GenerateCurrentPlayerInput()
@@ -41,8 +67,10 @@ public class PlayerInputHandler : MonoBehaviour
         // read mouse data
         Vector2 mouseWorldDirection = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - player.transform.position;
         SetMousePosition((Vector3)mouseWorldDirection + player.transform.position);
-        bool mouseHold = Mouse.current.leftButton.isPressed;
-        bool mouseClick = Mouse.current.leftButton.wasPressedThisFrame;
+
+        Tuple<bool, bool> mouseInputs = ReadMouseInputs();
+        bool mouseHold = mouseInputs.Item1;
+        bool mouseClick = mouseInputs.Item2;
 
         // read movement data
         Vector2 moveDirection = moveAction.ReadValue<Vector2>();
