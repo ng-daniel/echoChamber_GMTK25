@@ -9,6 +9,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     GameObject player;
     PlayerInput input;
+    InputDataRepository idr;
     PlayerController playerController;
     InputAction moveAction;
     InputAction dashAction;
@@ -23,6 +24,8 @@ public class PlayerInputHandler : MonoBehaviour
 
     void Awake()
     {
+        idr = FindFirstObjectByType<InputDataRepository>();
+
         player = GameObject.FindGameObjectWithTag("Player");
         input = GetComponent<PlayerInput>();
         playerController = player.GetComponent<PlayerController>();
@@ -117,7 +120,7 @@ public class PlayerInputHandler : MonoBehaviour
         bool result = playerController.HandleInputs(data);
         if (result == true)
         {
-            GlobalInputData.GetInstance().RecordInput(data);
+            idr.RecordInput(data);
         }
     }
     public InputData GetCurrentInputData()

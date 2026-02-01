@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+
+    InputDataRepository idm;
     EchoStateManager esm;
     Health health;
     SpriteRenderer sprite;
@@ -29,6 +31,8 @@ public class EnemyController : MonoBehaviour
 
         anim = GetComponent<Animator>();
 
+        idm = FindFirstObjectByType<InputDataRepository>();
+
         GlobalEventHolder.OnDeath += CheckPlayerDeath;
     }
     void OnDisable()
@@ -46,7 +50,7 @@ public class EnemyController : MonoBehaviour
     {
         if (isActive)
         {
-            InputData nextMove = GlobalInputData.GetInstance().GetInput(index);
+            InputData nextMove = idm.GetInput(index);
             esm.HandleInputs(nextMove);
             index++;
         }

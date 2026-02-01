@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemySpawnManager : MonoBehaviour
 {
 
+    InputDataRepository idr;
     [SerializeField] GameObject enemyPrefab;
     List<EnemyController> enemyList = new List<EnemyController>();
 
@@ -40,6 +41,8 @@ public class EnemySpawnManager : MonoBehaviour
 
     void Awake()
     {
+        idr = FindFirstObjectByType<InputDataRepository>();
+
         GlobalEventHolder.OnInitialServerClear += InitializeSpawning;
         GlobalEventHolder.OnDeath += CheckPlayerDeadOnDeath;
     }
@@ -87,7 +90,7 @@ public class EnemySpawnManager : MonoBehaviour
     {
         if (staticSpawnRunning) return false;
 
-        InputData data = GlobalInputData.GetInstance().GetInputBySecondsBehind(staticStartSecondsBehind);
+        InputData data = idr.GetInputBySecondsBehind(staticStartSecondsBehind);
         if (data == null) return false;
 
         StartCoroutine(StaticSpawnChainCoroutine(data));
@@ -114,16 +117,16 @@ public class EnemySpawnManager : MonoBehaviour
             return false;
         }
 
-        InputData data = GlobalInputData.GetInstance().GetInputBySecondsBehind(staticStartSecondsBehind);
+        InputData data = idr.GetInputBySecondsBehind(staticStartSecondsBehind);
         if (data == null) return false;
 
         List<InputData> dataSequence = new List<InputData>();
         int start = data.GetIndex();
-        int interval = Mathf.FloorToInt(dynamicSpawnDistanceSec * GlobalInputData.DATA_PER_SECOND);
+        int interval = Mathf.FloorToInt(dynamicSpawnDistanceSec * InputDataRepository.DATA_PER_SECOND);
         int end = start + (interval * dynamicSpawnAmount) - 1;
         for (int i = start; i < end; i += interval)
         {
-            InputData d = GlobalInputData.GetInstance().GetInput(i);
+            InputData d = idr.GetInput(i);
             if (d == null) return false;
             dataSequence.Add(d);
         }
