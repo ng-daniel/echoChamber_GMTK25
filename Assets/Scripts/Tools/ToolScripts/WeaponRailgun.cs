@@ -16,7 +16,7 @@ public class WeaponRailgun : MonoBehaviour, ITool
     bool isActive = false;
     SpriteRenderer gunSprite;
     [SerializeField] GameObject piercerPrefab;
-    [SerializeField] GameObject chargeEffect;
+    [SerializeField] ParticleSystem chargeEffect;
     [SerializeField] ParticleSystem cooldownEffect;
     DamageData railDamageData;
     WeaponRailgunStats stats;
@@ -43,10 +43,14 @@ public class WeaponRailgun : MonoBehaviour, ITool
         ToolUtility.AimToolAutoApply(aimDirection, transform, gunSprite);
         ToolUtility.SetDistFromBody(toolUser.gameObject.transform, transform, aimDirection, stats.gunDistanceFromBody);
 
-        bool mouseClick = inputData.IsMouseClick();
-        if (mouseClick && isActive && currentState == RailgunState.READY)
+        bool mouseHold = inputData.IsMouseHold();
+        if (mouseHold && isActive && currentState == RailgunState.READY)
         {
             StartCharge();
+        }
+        else if (!mouseHold && currentState == RailgunState.CHARGING)
+        {
+            Reset();
         }
         if (GetFireFlag())
         {
@@ -57,13 +61,13 @@ public class WeaponRailgun : MonoBehaviour, ITool
     void StartCharge()
     {
         chargeTimer = stats.chargeTime;
-        chargeEffect.SetActive(true);
+        chargeEffect.Play();
         currentState = RailgunState.CHARGING;
         print("RAIL CHARGE STARTED");
     }
     void FireShot(Vector2 direction)
     {
-        chargeEffect.SetActive(false);
+        chargeEffect.Stop();
         PiercerFunctionality piercerInstance = Instantiate(piercerPrefab, transform.position, Quaternion.identity).GetComponent<PiercerFunctionality>();
         piercerInstance.Initialize(
             direction,
@@ -77,11 +81,11 @@ public class WeaponRailgun : MonoBehaviour, ITool
     }
     void Reset()
     {
-        chargeTimer = 0f;
-        cooldownTimer = 0f;
+        chargeTimer = stats.chargeTime;
+        cooldownTimer = stats.fireCooldownSec;
         currentState = RailgunState.READY;
         cooldownEffect.Stop();
-        chargeEffect.SetActive(false);
+        chargeEffect.Stop();
     }
     void Update()
     {
@@ -147,7 +151,7 @@ public class WeaponRailgun : MonoBehaviour, ITool
     }
     public void Unequip()
     {
-        chargeEffect.SetActive(false);
+        chargeEffect.Stop();
         cooldownEffect.Stop();
         if (currentState == RailgunState.CHARGING)
         {

@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   piercerPrefab: {fileID: 8468012241674869090, guid: d881ed03725cd094d8216950e10c38d1, type: 3}
-  chargeEffect: {fileID: 7870207198067391840}
+  chargeEffect: {fileID: 8475908885445031363}
   cooldownEffect: {fileID: 4543663983895263078}
 --- !u!1 &2227277299366713971
 GameObject:
@@ -5043,7 +5043,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8869267872848194742
 Transform:
   m_ObjectHideFlags: 0
@@ -5053,7 +5053,7 @@ Transform:
   m_GameObject: {fileID: 7870207198067391840}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.18, y: 0.06, z: 0}
+  m_LocalPosition: {x: 0.154, y: 0.028, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5195,7 +5195,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 4
+      scalar: 6
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -5313,7 +5313,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.3
+      scalar: 0.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5690,14 +5690,14 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 10
+    type: 12
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: -35.6}
+    m_Rotation: {x: 0, y: 0, z: -90}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -5777,13 +5777,13 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.04
+      value: 0.05
       mode: 1
       spread: 0
       speed:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 2
+        scalar: 4
         minScalar: 1
         maxCurve:
           serializedVersion: 2
@@ -5896,7 +5896,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 30
+      scalar: 50
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -6014,20 +6014,20 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 1
-          inSlope: -0.074939296
-          outSlope: -0.074939296
+          inSlope: -4.1129413
+          outSlope: -4.1129413
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.100332245
+          outWeight: 0.04964538
         - serializedVersion: 3
           time: 1
           value: 0
-          inSlope: -0.7845751
-          outSlope: -0.7845751
+          inSlope: -0.52490026
+          outSlope: -0.52490026
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.40797353
+          inWeight: 0.8312058
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
