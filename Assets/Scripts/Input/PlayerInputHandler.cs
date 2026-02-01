@@ -38,6 +38,13 @@ public class PlayerInputHandler : MonoBehaviour
         bool mouseHold = mouseInputs.Item1;
         bool mouseClick = mouseInputs.Item2;
 
+        // buffer hotswap inputs
+        int hotswapIdx = ReadHotswapInput();
+        if (hotswapIdx != -1 && hotswapIdx != mostRecentHotswap)
+        {
+            mostRecentHotswap = hotswapIdx;
+        }
+
         if (mouseClick && !recentMouseClick)
         {
             recentMouseClick = true;
@@ -61,6 +68,17 @@ public class PlayerInputHandler : MonoBehaviour
             Mouse.current.leftButton.wasPressedThisFrame
         );
     }
+    int ReadHotswapInput()
+    {
+        int hotswapIdx = -1;
+        if (hotswapAction.triggered)
+        {
+            float rawValue = hotswapAction.ReadValue<float>();
+            hotswapIdx = (int)rawValue - 1; // since raw input is read as 1-10, adjust for indexing by subtracting 1 to make it 0-9 (not pressing anything gives -1)
+            print("TRIGGERED: " + hotswapIdx);
+        }
+        return hotswapIdx;
+    }
 
     InputData GenerateCurrentPlayerInput()
     {
@@ -77,13 +95,7 @@ public class PlayerInputHandler : MonoBehaviour
         bool dashPress = dashAction.ReadValue<float>() != 0;
 
         // read swap data
-        int hotswapIdx = -1;
-        if (hotswapAction.triggered)
-        {
-            float rawValue = hotswapAction.ReadValue<float>();
-            hotswapIdx = (int)rawValue - 1; // since raw input is read as 1-10, adjust for indexing by subtracting 1 to make it 0-9 (not pressing anything gives -1)
-            print("TRIGGERED: " + hotswapIdx);
-        }
+        int hotswapIdx = ReadHotswapInput();
         if (hotswapIdx != -1 && hotswapIdx != mostRecentHotswap)
         {
             mostRecentHotswap = hotswapIdx;
