@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using InputDataSystem;
+
 public class EnemyController : MonoBehaviour
 {
-
     InputDataRepository idm;
     EchoStateManager esm;
     Health health;
@@ -13,10 +14,9 @@ public class EnemyController : MonoBehaviour
     Animator anim;
 
     [Header("Read Input Parameters")]
-    int index;
     bool isActive;
+    InputDataMetadata currentInputMeta;
     [SerializeField] float deathTimer;
-
     Func<EnemyController, bool> removeFromRecord;
 
     void Awake()
@@ -40,19 +40,18 @@ public class EnemyController : MonoBehaviour
         GlobalEventHolder.OnDeath -= CheckPlayerDeath;
     }
 
-    public void Initialize(InputData firstMove, Func<EnemyController, bool> removeFromRecord)
+    public void Initialize(InputDataMetadata firstMove, Func<EnemyController, bool> removeFromRecord)
     {
-        transform.position = firstMove.GetPosition();
-        this.index = firstMove.GetIndex();
+        currentInputMeta = firstMove;
+        transform.position = firstMove.GetInputData().GetPosition();
         this.removeFromRecord = removeFromRecord;
     }
     void FixedUpdate()
     {
         if (isActive)
         {
-            InputData nextMove = idm.GetInput(index);
-            esm.HandleInputs(nextMove);
-            index++;
+            currentInputMeta = idm.GetNextInput(currentInputMeta);
+            esm.HandleInputs(currentInputMeta.GetInputData());
         }
     }
     public void ActivateEnemy()

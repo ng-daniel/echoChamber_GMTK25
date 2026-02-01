@@ -3,6 +3,7 @@ using UnityEngine;
 
 using Tools;
 using VisualKits;
+using InputDataSystem;
 
 public class WeaponBase : MonoBehaviour, ITool
 {

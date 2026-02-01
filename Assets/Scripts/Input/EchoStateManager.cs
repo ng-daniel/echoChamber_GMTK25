@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Tools;
 using UnityEngine;
 
+using InputDataSystem;
+
 public class EchoStateManager : MonoBehaviour
 {
 

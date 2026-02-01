@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using InputDataSystem;
+
 public class PlayerController : MonoBehaviour
 {
     EchoStateManager esm;

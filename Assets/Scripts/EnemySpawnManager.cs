@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using InputDataSystem;
+
 public class EnemySpawnManager : MonoBehaviour
 {
 
@@ -90,18 +92,18 @@ public class EnemySpawnManager : MonoBehaviour
     {
         if (staticSpawnRunning) return false;
 
-        InputData data = idr.GetInputBySecondsBehind(staticStartSecondsBehind);
-        if (data == null) return false;
+        InputDataMetadata meta = idr.GetInputBySecondsBehind(staticStartSecondsBehind);
+        if (meta == null) return false;
 
-        StartCoroutine(StaticSpawnChainCoroutine(data));
+        StartCoroutine(StaticSpawnChainCoroutine(meta));
         return true;
     }
-    IEnumerator StaticSpawnChainCoroutine(InputData data)
+    IEnumerator StaticSpawnChainCoroutine(InputDataMetadata meta)
     {
         staticSpawnRunning = true;
         for (int i = 0; i < staticSpawnAmount; i++)
         {
-            SpawnEnemyWithInputFrame(data);
+            SpawnEnemyWithInputFrame(meta);
             yield return new WaitForSeconds(staticSpawnIntervalSec);
         }
         staticSpawnRunning = false;
@@ -117,23 +119,23 @@ public class EnemySpawnManager : MonoBehaviour
             return false;
         }
 
-        InputData data = idr.GetInputBySecondsBehind(staticStartSecondsBehind);
-        if (data == null) return false;
+        InputDataMetadata meta = idr.GetInputBySecondsBehind(staticStartSecondsBehind);
+        if (meta == null) return false;
 
-        List<InputData> dataSequence = new List<InputData>();
-        int start = data.GetIndex();
+        List<InputDataMetadata> dataSequence = new List<InputDataMetadata>();
+        int start = meta.GetIndex();
         int interval = Mathf.FloorToInt(dynamicSpawnDistanceSec * InputDataRepository.DATA_PER_SECOND);
         int end = start + (interval * dynamicSpawnAmount) - 1;
         for (int i = start; i < end; i += interval)
         {
-            InputData d = idr.GetInput(i);
+            InputDataMetadata d = idr.GetInput(i);
             if (d == null) return false;
             dataSequence.Add(d);
         }
         StartCoroutine(DynamicSpawnChainCoroutine(dataSequence));
         return true;
     }
-    IEnumerator DynamicSpawnChainCoroutine(List<InputData> dataSequence)
+    IEnumerator DynamicSpawnChainCoroutine(List<InputDataMetadata> dataSequence)
     {
         dynamicSpawnRunning = true;
         for (int i = 0; i < dynamicSpawnAmount; i++)
@@ -145,13 +147,13 @@ public class EnemySpawnManager : MonoBehaviour
         dynamicSpawnRunning = false;
     }
 
-    void SpawnEnemyWithInputFrame(InputData inputData)
+    void SpawnEnemyWithInputFrame(InputDataMetadata inputDataMetadata)
     {
-        if (inputData == null) print("ERROR: inputData is null for trying to spawn an enemy.");
+        if (inputDataMetadata == null) print("ERROR: inputDataMetadata is null for trying to spawn an enemy.");
 
-        GameObject newEnemy = Instantiate(enemyPrefab, inputData.GetPosition(), Quaternion.identity);
+        GameObject newEnemy = Instantiate(enemyPrefab, inputDataMetadata.GetInputData().GetPosition(), Quaternion.identity);
         EnemyController enemyController = newEnemy.GetComponent<EnemyController>();
-        enemyController.Initialize(inputData, enemyList.Remove);
+        enemyController.Initialize(inputDataMetadata, enemyList.Remove);
         enemyList.Add(enemyController);
     }
     void CheckPlayerDeadOnDeath(GameObject victim)

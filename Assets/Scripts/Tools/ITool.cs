@@ -2,6 +2,8 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
+using InputDataSystem;
+
 namespace Tools
 {
     public interface ITool

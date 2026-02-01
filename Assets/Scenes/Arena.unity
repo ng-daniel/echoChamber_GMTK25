@@ -2576,7 +2576,7 @@ GameObject:
   - component: {fileID: 1711475595}
   - component: {fileID: 1711475596}
   m_Layer: 0
-  m_Name: GlobalInputData
+  m_Name: InputDataRepository
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
