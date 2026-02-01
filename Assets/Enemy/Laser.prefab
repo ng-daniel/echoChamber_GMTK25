@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8751623268006963446}
   - component: {fileID: 7479327349510442096}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: LittleLineEmitter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,6 +50,9 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -147,7 +150,7 @@ GameObject:
   - component: {fileID: 5073925363251914631}
   - component: {fileID: 4940208129745011074}
   - component: {fileID: 8840884849893889523}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: BeamParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4910,6 +4913,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4976,7 +4982,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3631639649009907261}
   - component: {fileID: 8869084569431091417}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: BigLineEmitter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5016,6 +5022,9 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5113,7 +5122,7 @@ GameObject:
   - component: {fileID: 1490081535960562591}
   - component: {fileID: 4153779599430895747}
   - component: {fileID: 8524461209535054703}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: SplashParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9885,6 +9894,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9952,7 +9964,7 @@ GameObject:
   - component: {fileID: 1224167415634759457}
   - component: {fileID: 5065051939398606728}
   - component: {fileID: 1173226092015893401}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10013,7 +10025,7 @@ MonoBehaviour:
   rotateWindDownTimeSec: 0.5
 --- !u!50 &1173226092015893401
 Rigidbody2D:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -10024,8 +10036,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
