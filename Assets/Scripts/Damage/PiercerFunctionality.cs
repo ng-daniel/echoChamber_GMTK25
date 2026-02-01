@@ -4,7 +4,7 @@ using Tools;
 using VisualKits;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
-public class PiercerFunctionality : MonoBehaviour
+public class PiercerFunctionality : MonoBehaviour, IDamaging
 {
     const int MAX_LENGTH = 500;
     Rigidbody2D rb;
@@ -89,6 +89,14 @@ public class PiercerFunctionality : MonoBehaviour
             {
                 continue;
             }
+            if (this.gameObject.CompareTag(hit.collider.gameObject.tag))
+            {
+                Health otherHealth = hit.collider.gameObject.GetComponent<Health>();
+                if (otherHealth != null)
+                {
+                    otherHealth.KillNoRegard();
+                }
+            }
             bool result = TryHitTarget(hit.collider.gameObject);
             print("AHHHH: " + hit.collider.gameObject.name + " -> " + result);
         }
@@ -115,19 +123,7 @@ public class PiercerFunctionality : MonoBehaviour
 
     bool TryHitTarget(GameObject target)
     {
-        if (target == damageData.GetAttacker())
-            return false;
-        if (target.layer == damageData.GetAttackerLayer())
-            return false;
-        if (optionalCollisionIgnores != 0 &&
-            (((1 << target.layer) & optionalCollisionIgnores.value) != 0)) // is there a layermask override - if so does it apply to the current target?
-            return false;
-
-        Health hp = target.GetComponent<Health>();
-        if (hp != null)
-            hp.Damage(new(damageData));
-
-        return true;
+        return IDamaging.TryHitTarget(target, damageData, optionalCollisionIgnores);
     }
     void PreFizzle()
     {
@@ -137,5 +133,9 @@ public class PiercerFunctionality : MonoBehaviour
     {
         Instantiate(particle, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
+    }
+    public DamageData GetDamageData()
+    {
+        return damageData;
     }
 }

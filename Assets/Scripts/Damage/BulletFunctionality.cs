@@ -6,9 +6,9 @@ using UnityEngine;
 using Tools;
 using VisualKits;
 
-public class BulletFunctionality : MonoBehaviour
+public class BulletFunctionality : MonoBehaviour, IDamaging
 {
-
+    Health hp;
     Rigidbody2D rb;
     float speed;
     DamageData damageData;
@@ -34,6 +34,9 @@ public class BulletFunctionality : MonoBehaviour
         {
             visKit.SelectKit(damage.GetAttacker().tag);
         }
+
+        hp = this.gameObject.GetComponent<Health>();
+        hp.SetDeathEvent(FizzleOut);
     }
 
     public void OptionalCollisionIgnores(LayerMask layers)
@@ -57,32 +60,20 @@ public class BulletFunctionality : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == this.gameObject.tag)
-        {
-            return;
-        }
         bool hitResult = TryHitTarget(collision.gameObject);
         if (hitResult) FizzleOut();
     }
     bool TryHitTarget(GameObject target)
     {
-        if (target == damageData.GetAttacker())
-            return false;
-        if (target.layer == damageData.GetAttackerLayer())
-            return false;
-        if (optionalCollisionIgnores != 0 &&
-            (((1 << target.layer) & optionalCollisionIgnores.value) != 0)) // is there a layermask override - if so does it apply to the current target?
-            return false;
-
-        Health hp = target.GetComponent<Health>();
-        if (hp != null)
-            hp.Damage(new(damageData));
-
-        return true;
+        return IDamaging.TryHitTarget(target, damageData, optionalCollisionIgnores);
     }
     void FizzleOut()
     {
         Instantiate(particle, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
+    }
+    public DamageData GetDamageData()
+    {
+        return damageData;
     }
 }

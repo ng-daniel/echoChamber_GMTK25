@@ -10009,7 +10009,7 @@ GameObject:
   - component: {fileID: 3811583063924323063}
   m_Layer: 0
   m_Name: Piercer
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10044,6 +10044,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 125
   particle: {fileID: 3085199756470151527, guid: 62db37a7a9b767d42918924218bdc320, type: 3}
+  rayStoppingLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!61 &597975519174147805
 BoxCollider2D:
   m_ObjectHideFlags: 0
