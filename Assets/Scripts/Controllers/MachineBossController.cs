@@ -26,6 +26,7 @@ public class MachineBossController : MonoBehaviour
     [SerializeField] GameObject deathVisual;
 
     [Header("Server Params")]
+    [SerializeField] int startingServerCount; // must be less than or equal to serverPositions.Count
     [SerializeField] GameObject serverPrefab;
     [SerializeField] List<Transform> serverPositions = new List<Transform>();
     List<GameObject> serverList = new List<GameObject>();
@@ -51,7 +52,7 @@ public class MachineBossController : MonoBehaviour
         if (!initialOperate)
         {
             initialOperate = true;
-            OperateServers(serverList.Count);
+            OperateServers(startingServerCount);
         }
 
         if (attackEnabled)
